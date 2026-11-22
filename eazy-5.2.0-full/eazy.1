@@ -1,0 +1,137 @@
+.TH EAZY 1 "2026-11-16" "eazy 5.2.0" "User Commands"
+.SH NAME
+eazy \- navegador de arquivos, reprodutor multimídia, downloads e streaming no terminal
+.SH SYNOPSIS
+.B eazy
+[\fIOPTIONS\fR] [\fIPATH\fR]
+.br
+.B eazy \-\-stream
+.br
+.B eazy \-\-install
+.SH DESCRIPTION
+.B eazy
+é um navegador de arquivos e reprodutor multimídia para o terminal, baseado em fzf e players como mpv, mplayer, VLC ou ffplay. Mantém seleção, filas e listas temporárias, pesquisa, histórico, downloads, exportação HTML, manutenção e backups.
+.P
+Filas e listas personalizadas são persistidas em tabelas SQLite individuais no banco local. Arquivos temporários em ~/.config/eazy/tmp são snapshots efêmeros de compatibilidade, não a fonte permanente dos dados.
+.P
+A Central complementar \fBeazy-yt-stream\fR oferece pesquisa de vídeos, duração, paginação, pesquisas persistentes, favoritos, canais de filmes gratuitos e TV aberta. Usa yt-dlp e não contorna DRM.
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Mostra a ajuda resumida.
+.TP
+.BR \-V ", " \-\-version
+Mostra a versão e revisão instalada.
+.TP
+.B \-\-stream
+Abre a Central eazy-yt-stream.
+.TP
+.B \-\-install
+Instala dependências, eazy, eazy-index.py, o migrador de listas, eazy-yt-stream, eazy-tor, eazy-ai.py, eazy-notes-editor, launcher e man page.
+.TP
+.B \-\-update-all
+Atualiza dependências e o binário oficial yt-dlp.
+.TP
+.BR \-m ", " \-\-maintenance
+Abre as ferramentas de manutenção do sistema e do próprio eazy.
+.TP
+.B \-\-backup
+Abre o gerenciador de backup.
+.TP
+.B \-\-restore-backup
+Abre o restaurador de backup.
+.TP
+.BR \-a ", " \-\-advanced-maintenance
+Abre a manutenção avançada para selecionar arquivos próprios do eazy.
+.SH KEY BINDINGS
+.TP
+.B F1 / F2 / Ctrl-T
+Ordena por tamanho, nome ou data.
+.TP
+.B F9
+Configuração, diagnóstico, som e IA.
+.TP
+.B F10
+Ajuda expandida no terminal ou em HTML.
+.TP
+.B Ctrl-B
+Gerenciador de downloads e Central de streaming.
+.TP
+.B Ctrl-D
+Localiza duplicados.
+.TP
+.B Ctrl-F
+Pesquisa recursiva.
+.TP
+.B Ctrl-G
+Abre o histórico de reprodução.
+.TP
+.B Ctrl-H
+Exporta HTML da seleção ou da tela atual.
+.TP
+.B Insert
+Adiciona a seleção à fila SQL escolhida ou cria uma nova lista SQL.
+.TP
+.B Ctrl-P
+Alterna entre diretório, filas SQL 1–3, listas personalizadas, histórico e duplicados. O cabeçalho exibe o nome lógico da lista, não o nome do snapshot.
+.TP
+.B Del / Alt-D
+Del remove o item apenas da lista; Alt-D apaga o arquivo físico após confirmação.
+.TP
+.B Q / Ctrl-Q
+Salva a sessão e sai.
+.SH PERSISTENCE AND MIGRATION
+.TP
+.B SQLite database
+O banco padrão é ~/.config/eazy/eazy-index.sqlite3. Ele contém o índice de arquivos, o histórico e as tabelas de filas/listas.
+.TP
+.B Legacy history
+Na primeira entrada em Histórico por Ctrl-G ou Ctrl-P, o Easy avisa, reconstrói history_items lendo ~/.config/eazy/history linha a linha e preserva intacto o arquivo de origem. A primeira tentativa migra e retorna; entre novamente no Histórico.
+.TP
+.B Legacy queue/list migration
+Antes de usar filas/listas antigas em arquivos, feche o Easy e confira a prévia com python3 migrate_eazy_lists.py. Em instalação Debian, use python3 /usr/lib/eazy/migrate_eazy_lists.py. Aplique com --apply. O migrador faz backup do banco e preserva os arquivos antigos. Não use --replace sem revisar a divergência.
+.SH FILES
+.TP
+.I ~/.config/eazy/eazy-index.sqlite3
+Índice local, histórico, filas e tabelas de listas temporárias.
+.TP
+.I ~/.config/eazy/tmp/
+Snapshots e outros arquivos temporários da sessão; não são fonte permanente das listas.
+.TP
+.I ~/.config/eazy/history
+Arquivo original de histórico legado, preservado durante a migração.
+.TP
+.I /usr/bin/eazy
+Executável principal.
+.TP
+.I /usr/lib/eazy/
+Componentes auxiliares, incluindo eazy-index.py e o migrador de listas.
+.TP
+.I /usr/share/man/man1/eazy.1.gz
+Esta man page.
+.SH COMPANIONS
+.TP
+.B eazy-index.py
+Indexação de arquivos e operações transacionais SQLite.
+.TP
+.B migrate_eazy_lists.py
+Prévia e migração das listas legadas para tabelas SQLite.
+.TP
+.B eazy-yt-stream
+Streaming, pesquisas, filmes gratuitos, TV aberta, favoritos e downloads.
+.TP
+.B eazy-tor
+Magnets e arquivos .torrent.
+.TP
+.B eazy-ai.py
+Cliente de IA acessível pelo F9.
+.TP
+.B eazy-notes-editor
+Editor de notas rápidas.
+.SH AUTHOR
+John B Kersting
+.SH SEE ALSO
+.BR fzf (1),
+.BR mpv (1),
+.BR yt-dlp (1),
+.BR aria2c (1)

@@ -1,0 +1,26 @@
+eazy 4.4.4 — WSL2
+=================
+
+Requisitos WSL2:
+  - Windows 10 21H2+ ou Windows 11 (WSLg recomendado p/ vídeo/áudio)
+  - Ubuntu 22.04/24.04 no WSL
+
+Instalação:
+  sudo dpkg -i eazy_4.4.4_all.deb
+  sudo apt-get install -f -y
+  sudo apt-get install -y fzf whiptail gawk aria2 ffmpeg yt-dlp python3
+  # player (WSLg / X):
+  sudo apt-get install -y mpv
+  # opcional: abrir links no Windows
+  sudo apt-get install -y wslu   # fornece wslview
+
+Uso:
+  eazy
+  eazy /mnt/c/Users/SEU_USER/Videos
+  eazy ~/Downloads
+
+Notas WSL2:
+  - Config/tmp: ~/.config/eazy/  (não usa /tmp do sistema)
+  - HTML/export abre no browser do Windows via wslview/explorer se disponível
+  - Vídeo: com WSLg (Win11) o mpv usa GUI; sem WSLg use ffplay/mpv --vo=tct ou toque no Windows
+  - Paths Windows: /mnt/c/... /mnt/d/...
