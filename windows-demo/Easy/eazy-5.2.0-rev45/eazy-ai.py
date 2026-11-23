@@ -40,7 +40,7 @@ def ask(url, model, api_key, messages):
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://github.com/vapesmadcat-blip/Easy_Player",
+            "HTTP-Referer": "https://github.com/jbkrazy77-dotcom/Eazy-player",
             "X-Title": "eazy",
         },
         method="POST",

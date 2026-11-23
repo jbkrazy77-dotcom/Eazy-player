@@ -2,7 +2,7 @@
 # Base: DIRLOCAL; cálculo de status global: eazy_global_correto_PERSISTENCIA_CALCULO_QUANTIDADE
 #  eazy 5.0.0 — navegador e reprodutor multimídia no terminal
 #  Revisão 4.2.2 — tmp em ~/.config/eazy/tmp; export HTML (Ctrl-H) seleção|tela; caches/listas no config
-#  https://github.com/vapesmadcat-blip/Easy_Player
+#  https://github.com/jbkrazy77-dotcom/Eazy-player
 #  fzf + mpv/mplayer/cvlc/ffplay | seleção persistente | manutenção do sistema
 #
 #  Licença: uso livre. Sem garantias.
@@ -2010,7 +2010,7 @@ EOF
 # Ajuda no terminal (stdout) — estilo utilitário Unix
 exibir_help_cli() {
     cat <<EOF
-${EAZY_NAME} ${EAZY_VERSION} (${EAZY_CODENAME}) — navegador e player multimídia no terminal
+${EAZY_NAME} ${EAZY_VERSION} rev.${EAZY_REVISION} (${EAZY_CODENAME}) — navegador e player multimídia no terminal
 
 Made by ${EAZY_AUTHOR}
 Uso:
@@ -2031,7 +2031,7 @@ Opções:
   --silent, -q       Silencioso (padrão): sem barra de processamento
   --ignore           Anónimo: sem sessão, seleção, posições, histórico, filas
   --unselect         Limpa seleção global e local (selected_paths) e continua
-  --install          Instala dependências, comando global, scripts e migrador SQLite
+  --install          Instala o principal em /usr/bin/eazy e os auxiliares do sistema
   --update-all       Atualiza todas as dependências (+ yt-dlp oficial)
   --uninstall        Remove os destinos eazy instalados e o launcher .desktop
   --update-ytdlp     Atualiza o yt-dlp (binário oficial, sem pip)
@@ -2111,8 +2111,8 @@ EOF
 # Ajuda visual (F10)
 exibir_help() {
     if [ -t 1 ] && command -v whiptail &>/dev/null; then
-        whiptail --title "eazy ${EAZY_VERSION} — Ajuda" --msgbox "\
-eazy ${EAZY_VERSION} (${EAZY_CODENAME})
+        whiptail --title "eazy ${EAZY_VERSION} rev.${EAZY_REVISION} — Ajuda" --msgbox "\
+eazy ${EAZY_VERSION} rev.${EAZY_REVISION} (${EAZY_CODENAME})
 
 Made by ${EAZY_AUTHOR}
 Uso: eazy [pasta|arquivo] · eazy -m
@@ -2169,8 +2169,8 @@ exibir_help_expandido() {
 
     eazy_gerar_help_html "$html"
 
-    escolha=$(whiptail --title "eazy ${EAZY_VERSION} — ${EAZY_AUTHOR}" --menu \
-        "eazy ${EAZY_VERSION}  ·  ${EAZY_AUTHOR}\nHelp completo gerado.\n\nEscolha como visualizar:" 18 72 5 \
+    escolha=$(whiptail --title "eazy ${EAZY_VERSION} rev.${EAZY_REVISION} — ${EAZY_AUTHOR}" --menu \
+        "eazy ${EAZY_VERSION} rev.${EAZY_REVISION} (${EAZY_CODENAME})  ·  ${EAZY_AUTHOR}\nHelp completo gerado.\n\nEscolha como visualizar:" 18 72 5 \
         "1" "Abrir HTML no navegador (recomendado)" \
         "2" "Ver no terminal (less / rolagem)" \
         "3" "Seções no terminal (menu)" \
@@ -2206,7 +2206,7 @@ exibir_help_expandido() {
 eazy_help_menu_secoes() {
     local s
     while true; do
-        s=$(whiptail --title "Help por seção — eazy ${EAZY_VERSION}" --menu \
+        s=$(whiptail --title "Help por seção — eazy ${EAZY_VERSION} rev.${EAZY_REVISION}" --menu \
             "Selecione a seção:" 22 78 12 \
             "nav"    "Navegação, filtros e busca" \
             "dup"    "Duplicados e progresso" \
@@ -2396,7 +2396,7 @@ S
 
 eazy_help_texto() {
     cat <<EOF
-eazy ${EAZY_VERSION} — Navegador e Reprodutor Multimídia
+eazy ${EAZY_VERSION} rev.${EAZY_REVISION} (${EAZY_CODENAME}) — Navegador e Reprodutor Multimídia
 Made by ${EAZY_AUTHOR}  ·  F10 = esta ajuda
 ════════════════════════════════════════════════════════════════════
 
@@ -2425,6 +2425,8 @@ EOF
 eazy_gerar_help_html() {
     local out="${1:-${CONFIG_DIR}/eazy-help-${EAZY_VERSION}.html}"
     local ver="${EAZY_VERSION:-}"
+    local rev="${EAZY_REVISION:-}"
+    local codename="${EAZY_CODENAME:-}"
     local author="${EAZY_AUTHOR:-John B Kersting}"
     mkdir -p "$(dirname -- "$out")" 2>/dev/null || true
     cat > "$out" <<EOF
@@ -2433,7 +2435,7 @@ eazy_gerar_help_html() {
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>eazy ${ver} — Help</title>
+<title>eazy ${ver} rev.${rev} (${codename}) — Help</title>
 <style>
 :root {
   --bg: #0b1220;
@@ -2578,8 +2580,8 @@ footer a { color: var(--accent); }
   <header class="hero">
     <div>
       <span class="badge">HELP COMPLETO</span>
-      <h1>eazy ${ver}</h1>
-      <p class="sub">eazy ${ver} · Navegador e reprodutor multimídia · Made by ${author}</p>
+      <h1>eazy ${ver} rev.${rev}</h1>
+      <p class="sub">eazy ${ver} rev.${rev} (${codename}) · Navegador e reprodutor multimídia · Made by ${author}</p>
     </div>
     <div class="hero-meta">
       <span class="pill">fzf + mpv</span>
@@ -2707,8 +2709,8 @@ footer a { color: var(--accent); }
   </section>
 
   <footer>
-    Gerado pelo eazy ${ver} ·
-    <a href="https://github.com/vapesmadcat-blip/Easy_Player">GitHub Easy_Player</a>
+    Gerado pelo eazy ${ver} rev.${rev} (${codename}) ·
+    <a href="https://github.com/jbkrazy77-dotcom/Eazy-player">GitHub Eazy-player</a>
   </footer>
 </div>
 </body>
@@ -4522,12 +4524,7 @@ if [ "$1" = "--install" ]; then
     SCRIPT_ATUAL="$(readlink -f "$0")"
     SCRIPT_DIR="$(dirname -- "$SCRIPT_ATUAL")"
     DEST_USR_BIN="/usr/bin/eazy"
-    DEST_USR_LIB="/usr/lib/eazy/eazy"
-    DEST_USR_LOCAL="/usr/local/bin/eazy"
-    INSTALL_USER="${SUDO_USER:-${USER:-$(id -un)}}"
-    INSTALL_HOME="$(getent passwd "$INSTALL_USER" 2>/dev/null | cut -d: -f6)"
-    [ -n "$INSTALL_HOME" ] || INSTALL_HOME="$HOME"
-    DEST_USER_LOCAL="$INSTALL_HOME/.local/bin/eazy"
+    DEST_USR_LIB="/usr/lib/eazy"
     DESKTOP_SRC="$SCRIPT_DIR/eazy.desktop"
     [ -f "$DESKTOP_SRC" ] || DESKTOP_SRC="$(dirname -- "$SCRIPT_ATUAL")/../share/applications/eazy.desktop"
     EDITOR_SRC="$SCRIPT_DIR/eazy-notes-editor"
@@ -4541,6 +4538,10 @@ if [ "$1" = "--install" ]; then
     [ -f "$LIVE_WATCH_SRC" ] || LIVE_WATCH_SRC="/usr/lib/eazy/eazy-live-watch.py"
     FULL_MONITOR_SRC="$SCRIPT_DIR/full.c"
     [ -f "$FULL_MONITOR_SRC" ] || FULL_MONITOR_SRC="/usr/lib/eazy/full.c"
+    FULL_BIN_SRC="$SCRIPT_DIR/full"
+    [ -f "$FULL_BIN_SRC" ] || FULL_BIN_SRC="/usr/lib/eazy/full"
+    STREAM_SRC="$SCRIPT_DIR/eazy-yt-stream"
+    [ -f "$STREAM_SRC" ] || STREAM_SRC="/usr/bin/eazy-yt-stream"
     [ -f "$LIVE_WATCH_SRC" ] && [ -f "$FULL_MONITOR_SRC" ] || {
         echo "Monitor recursivo não encontrado: eazy-live-watch.py e full.c são necessários." >&2
         exit 1
@@ -4548,37 +4549,29 @@ if [ "$1" = "--install" ]; then
     MIGRATOR_SRC="$SCRIPT_DIR/migrate_eazy_lists.py"
     [ -f "$MIGRATOR_SRC" ] || MIGRATOR_SRC="/usr/lib/eazy/migrate_eazy_lists.py"
     TOR_SRC="$SCRIPT_DIR/eazy-tor"
-    [ -f "$TOR_SRC" ] || TOR_SRC="/usr/lib/eazy/eazy-tor"
     [ -f "$TOR_SRC" ] || TOR_SRC="$(command -v eazy-tor 2>/dev/null || true)"
-    DESKTOP_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
     # Estrutura completa de dados do usuário; o cache de busca continua temporário.
     mkdir -p "$CONFIG_DIR" "$EAZY_TMP_DIR" "$NOTES_DIR" "$SAVED_SEARCHES_DIR" "$MPV_SCRIPT_DIR" "$SCRIPTS_DIR" "$BACKUPS_DIR" "$PLAYLIST_DIR_PADRAO" "$(eazy_dir_notas_export)" "$(eazy_dir_html_export)" "${TORRENT_DIR:-$HOME/Downloads/Torrents}"
     touch "$HISTORY_FILE" "$DOWNLOAD_QUEUE" "$TORRENT_QUEUE" "$STREAM_QUEUE"
     eazy_instalar_script_manut_completa >/dev/null 2>&1 || true
 
-    echo -e "\033[1;34mInstalando eazy ${EAZY_VERSION} nos destinos compatíveis...\033[0m"
+    echo -e "\033[1;34mInstalando eazy ${EAZY_VERSION} nos destinos do sistema...\033[0m"
     sudo install -Dm755 "$SCRIPT_ATUAL" "$DEST_USR_BIN"
-    sudo install -Dm755 "$SCRIPT_ATUAL" "$DEST_USR_LIB"
-    sudo ln -sfn "$DEST_USR_BIN" "$DEST_USR_LOCAL"
-    mkdir -p "$(dirname -- "$DEST_USER_LOCAL")"
-    install -Dm755 "$SCRIPT_ATUAL" "$DEST_USER_LOCAL"
-    sudo install -Dm644 "$INDEXER_SRC" /usr/lib/eazy/eazy-index.py
-    install -Dm644 "$INDEXER_SRC" "$(dirname -- "$DEST_USER_LOCAL")/eazy-index.py"
-    sudo install -Dm755 "$LIVE_WATCH_SRC" /usr/lib/eazy/eazy-live-watch.py
+    sudo install -Dm644 "$INDEXER_SRC" "$DEST_USR_LIB/eazy-index.py"
+    sudo install -Dm755 "$LIVE_WATCH_SRC" "$DEST_USR_LIB/eazy-live-watch.py"
     sudo install -Dm644 "$FULL_MONITOR_SRC" /usr/lib/eazy/full.c
-    install -Dm755 "$LIVE_WATCH_SRC" "$(dirname -- "$DEST_USER_LOCAL")/eazy-live-watch.py"
-    install -Dm644 "$FULL_MONITOR_SRC" "$(dirname -- "$DEST_USER_LOCAL")/full.c"
-    printf '%s\n' "  ✓ $DEST_USR_BIN" "  ✓ $DEST_USR_LIB" "  ✓ $DEST_USR_LOCAL -> $DEST_USR_BIN" "  ✓ $DEST_USER_LOCAL" "  ✓ /usr/lib/eazy/eazy-index.py" "  ✓ $(dirname -- "$DEST_USER_LOCAL")/eazy-index.py"
-    printf '%s\n' "  ✓ /usr/lib/eazy/eazy-live-watch.py" "  ✓ /usr/lib/eazy/full.c" "  ✓ $(dirname -- "$DEST_USER_LOCAL")/eazy-live-watch.py" "  ✓ $(dirname -- "$DEST_USER_LOCAL")/full.c"
+    if [ -f "$FULL_BIN_SRC" ] && [ "$FULL_BIN_SRC" != "$DEST_USR_LIB/full" ]; then
+        sudo install -Dm755 "$FULL_BIN_SRC" "$DEST_USR_LIB/full"
+    fi
+    printf '%s\n' "  ✓ $DEST_USR_BIN" "  ✓ $DEST_USR_LIB/eazy-index.py" "  ✓ $DEST_USR_LIB/eazy-live-watch.py" "  ✓ $DEST_USR_LIB/full.c"
+    [ -x "$DEST_USR_LIB/full" ] && printf '%s\n' "  ✓ $DEST_USR_LIB/full"
     if [ -f "$MIGRATOR_SRC" ]; then
-        sudo install -Dm755 "$MIGRATOR_SRC" /usr/lib/eazy/migrate_eazy_lists.py
-        install -Dm755 "$MIGRATOR_SRC" "$(dirname -- "$DEST_USER_LOCAL")/migrate_eazy_lists.py"
-        printf '%s\n' "  ✓ /usr/lib/eazy/migrate_eazy_lists.py" "  ✓ $(dirname -- "$DEST_USER_LOCAL")/migrate_eazy_lists.py"
+        sudo install -Dm755 "$MIGRATOR_SRC" "$DEST_USR_LIB/migrate_eazy_lists.py"
+        printf '%s\n' "  ✓ $DEST_USR_LIB/migrate_eazy_lists.py"
     fi
     if [ -f "$EDITOR_SRC" ]; then
-        if sudo install -Dm755 "$EDITOR_SRC" /usr/lib/eazy/eazy-notes-editor \
-            && sudo install -Dm755 "$EDITOR_SRC" /usr/bin/eazy-notes-editor; then
-            echo -e "\033[1;32m✓\033[0m Editor de notas: /usr/lib/eazy/eazy-notes-editor (+ /usr/bin)"
+        if [ "$EDITOR_SRC" = /usr/bin/eazy-notes-editor ] || sudo install -Dm755 "$EDITOR_SRC" /usr/bin/eazy-notes-editor; then
+            echo -e "\033[1;32m✓\033[0m Editor de notas: /usr/bin/eazy-notes-editor"
         else
             echo -e "\033[1;31m✗\033[0m Falha ao instalar o editor de notas" >&2
             exit 1
@@ -4587,9 +4580,8 @@ if [ "$1" = "--install" ]; then
         echo -e "\033[1;33m!\033[0m Editor de notas não encontrado ao lado do script (eazy-notes-editor)"
     fi
     if [ -f "$AI_SRC" ]; then
-        if sudo install -Dm755 "$AI_SRC" /usr/lib/eazy/eazy-ai.py \
-            && sudo install -Dm755 "$AI_SRC" /usr/bin/eazy-ai.py; then
-            echo -e "\033[1;32m✓\033[0m Cliente de IA: /usr/lib/eazy/eazy-ai.py (+ /usr/bin)"
+        if [ "$AI_SRC" = /usr/bin/eazy-ai.py ] || sudo install -Dm755 "$AI_SRC" /usr/bin/eazy-ai.py; then
+            echo -e "\033[1;32m✓\033[0m Cliente de IA: /usr/bin/eazy-ai.py"
         else
             echo -e "\033[1;31m✗\033[0m Falha ao instalar o cliente de IA" >&2
             exit 1
@@ -4598,9 +4590,8 @@ if [ "$1" = "--install" ]; then
         echo -e "\033[1;33m!\033[0m Cliente de IA não encontrado (eazy-ai.py)"
     fi
     if [ -n "$TOR_SRC" ] && [ -f "$TOR_SRC" ]; then
-        if sudo install -Dm755 "$TOR_SRC" /usr/lib/eazy/eazy-tor \
-            && sudo install -Dm755 "$TOR_SRC" /usr/bin/eazy-tor; then
-            echo -e "\033[1;32m✓\033[0m eazy-tor: /usr/lib/eazy/eazy-tor (+ /usr/bin)"
+        if [ "$TOR_SRC" = /usr/bin/eazy-tor ] || sudo install -Dm755 "$TOR_SRC" /usr/bin/eazy-tor; then
+            echo -e "\033[1;32m✓\033[0m eazy-tor: /usr/bin/eazy-tor"
         else
             echo -e "\033[1;31m✗\033[0m Falha ao instalar eazy-tor" >&2
             exit 1
@@ -4608,15 +4599,21 @@ if [ "$1" = "--install" ]; then
     else
         echo -e "\033[1;33m!\033[0m eazy-tor não encontrado ao lado do script"
     fi
+    if [ -n "$STREAM_SRC" ] && [ -f "$STREAM_SRC" ]; then
+        if [ "$STREAM_SRC" = /usr/bin/eazy-yt-stream ] || sudo install -Dm755 "$STREAM_SRC" /usr/bin/eazy-yt-stream; then
+            echo -e "\033[1;32m✓\033[0m Central de streaming: /usr/bin/eazy-yt-stream"
+        else
+            echo -e "\033[1;31m✗\033[0m Falha ao instalar eazy-yt-stream" >&2
+            exit 1
+        fi
+    else
+        echo -e "\033[1;33m!\033[0m eazy-yt-stream não encontrado ao lado do script"
+    fi
     if [ -f "$DESKTOP_SRC" ]; then
-        mkdir -p "$DESKTOP_DIR"
-        cp "$DESKTOP_SRC" "$DESKTOP_DIR/eazy.desktop"
         # Cópia no sistema (menu GNOME/KDE de todos os usuários)
         if sudo install -Dm644 "$DESKTOP_SRC" /usr/share/applications/eazy.desktop 2>/dev/null; then
             echo -e "\033[1;32m✓\033[0m Launcher sistema: /usr/share/applications/eazy.desktop"
         fi
-        echo -e "\033[1;32m✓\033[0m Launcher: $DESKTOP_DIR/eazy.desktop"
-        command -v update-desktop-database &>/dev/null && update-desktop-database "$DESKTOP_DIR" 2>/dev/null || true
         command -v update-desktop-database &>/dev/null && sudo update-desktop-database /usr/share/applications 2>/dev/null || true
         # KDE: regenera cache do menu
         command -v kbuildsycoca6 &>/dev/null && kbuildsycoca6 --noincremental 2>/dev/null || true
@@ -4628,7 +4625,7 @@ if [ "$1" = "--install" ]; then
     # Man page embutida (não depende de eazy.1 ao lado do script)
     MAN_TMP=$(mktemp "${EAZY_TMP_DIR:-${CONFIG_DIR:-$HOME/.config/eazy}/tmp}/eazy-man.XXXXXX")
     cat > "$MAN_TMP" <<'EAZY_MAN_EOF'
-.TH EAZY 1 "2026-11-16" "eazy 5.2.0" "User Commands"
+.TH EAZY 1 "2026-11-23" "eazy 5.2.0 rev.45" "User Commands"
 .SH NAME
 eazy \- navegador de arquivos, reprodutor multimídia, downloads e streaming no terminal
 .SH SYNOPSIS
@@ -4653,11 +4650,47 @@ Mostra a ajuda resumida.
 .BR \-V ", " \-\-version
 Mostra a versão e revisão instalada.
 .TP
+.B \-\-config
+Abre o assistente de configuração, incluindo a pasta de downloads.
+.TP
+.B \-\-ai
+Abre o chat de IA configurado via OpenRouter.
+.TP
+.B \-\-restore-keys
+Restaura os atalhos de teclado padrão em ~/.config/eazy/keys.
+.TP
+.B \-\-shell-init
+Imprime uma função Bash que permite ao comando eazy mudar de diretório ao sair.
+.TP
+.BR \-v ", " \-\-verbose
+Mostra os arquivos a processar na barra de estado.
+.TP
+.BR \-q ", " \-\-silent
+Desativa a barra de processamento (padrão).
+.TP
+.B \-\-ignore
+Abre anonimamente, sem carregar ou gravar sessão, seleção, posições, histórico ou filas.
+.TP
+.B \-\-unselect
+Limpa a seleção global e local e continua a execução.
+.TP
+.B \-\-uninstall
+Remove os destinos eazy instalados e o lançador .desktop.
+.TP
+.B \-\-update-ytdlp
+Atualiza o yt-dlp pelo binário oficial, sem pip.
+.TP
 .B \-\-stream
 Abre a Central eazy-yt-stream.
 .TP
+.B \-\-torrent [OPÇÕES]
+Encaminha as opções ao downloader separado eazy-tor.
+.TP
+.B \-\-torrent-list [ARQUIVO]
+Cria uma lista em lote a partir da fila do eazy.
+.TP
 .B \-\-install
-Instala dependências, eazy, eazy-index.py, o migrador de listas, eazy-yt-stream, eazy-tor, eazy-ai.py, eazy-notes-editor, launcher e man page.
+Instala dependências; o principal fica em /usr/bin/eazy, os companions em /usr/bin e os helpers em /usr/lib/eazy.
 .TP
 .B \-\-update-all
 Atualiza dependências e o binário oficial yt-dlp.
@@ -4675,8 +4708,77 @@ Abre o restaurador de backup.
 Abre a manutenção avançada para selecionar arquivos próprios do eazy.
 .SH KEY BINDINGS
 .TP
+.B Enter
+Abre ou toca o item sob o cursor; em diretórios entra na pasta e em playlists abre o conteúdo. Em arquivos .deb, mostra os dados e solicita confirmação para instalar.
+.TP
+.B Ctrl+Espaço / F6
+Ativa a seleção inteira (Alt+Enter quando o terminal permite).
+.TP
+.BR Tab " / " Espaço
+Marca ou alterna itens; a seleção persiste entre pastas.
+.TP
+.BR Ctrl-A " / " Ctrl-X " / " Ctrl-R
+Seleciona todos os visíveis, limpa a seleção do diretório atual ou inverte marcas e persistência.
+.TP
+.B Insert
+Envia a seleção para uma fila temporária 1–3 ou para uma lista personalizada.
+.TP
+.B Ctrl-P
+Abre filas/listas SQL, Última pesquisa e Seleção global editável.
+.TP
+.B Ctrl-F
+Busca recursiva por extensão, tamanho ou conteúdo.
+.TP
+.B Ctrl-D
+Busca duplicados.
+.TP
+.B Ctrl-B
+Abre downloads, incluindo magnets e arquivos .torrent.
+.TP
+.B Ctrl-O
+Abre uma playlist .m3u ou .pls.
+.TP
+.B Ctrl-G
+Abre o histórico de reprodução.
+.TP
+.B Ctrl-K
+Abre o menu de ações sobre a seleção.
+.TP
+.BR Ctrl-Y " / " Ctrl-U
+Copia ou move a seleção.
+.TP
+.B Ctrl-E
+Toca a seleção em ordem aleatória.
+.TP
+.B Ctrl-L
+Vai à pasta do arquivo sob o cursor.
+.TP
+.B Ctrl-Backspace
+Volta ao último diretório.
+.TP
+.B Ctrl-H
+Exporta HTML da seleção ou do conteúdo da tela.
+.TP
+.BR Alt+0 " / " Alt+F10
+Mostra o terminal/status e pausa até Enter.
+.TP
+.B Alt+Q
+Pausa com read sem limpar a tela; Enter retoma.
+.TP
+.B Ctrl-/
+Liga ou desliga o preview.
+.TP
+.B Del / Shift+Del / Alt-D
+Apaga o item sob o cursor; apaga a seleção com escolha local/global; ou apaga do disco, respectivamente.
+.TP
 .B F1 / F2 / Ctrl-T
-Ordena por tamanho, nome ou data.
+Ordena por tamanho, nome ou data nos contextos aplicáveis.
+.TP
+.B F3
+Alterna a visualização entre tela cheia e janela.
+.TP
+.B F4 / F5 / F6 / F7 / F8
+Filtra áudio, vídeo, imagens e compactados; F8 alterna entre o filtro atual e todos os itens.
 .TP
 .B F9
 Configuração, diagnóstico, som e IA.
@@ -4684,31 +4786,10 @@ Configuração, diagnóstico, som e IA.
 .B F10
 Ajuda expandida no terminal ou em HTML.
 .TP
-.B Ctrl-B
-Gerenciador de downloads e Central de streaming.
+.B F12
+Reaplica persistência como multi-select; no modo Duplicados, seleciona uma amostra por grupo.
 .TP
-.B Ctrl-D
-Localiza duplicados.
-.TP
-.B Ctrl-F
-Pesquisa recursiva. Uma busca nova, inclusive respondida pelo índice SQLite rápido, fica na tabela SQL Última pesquisa até a próxima busca; não persiste em --ignore.
-.TP
-.B Ctrl-G
-Abre o histórico de reprodução.
-.TP
-.B Ctrl-H
-Exporta HTML da seleção ou da tela atual. Cada item tem um link “Ir para a pasta” que navega para o diretório correspondente usando file://.
-.TP
-.B Insert
-Adiciona a seleção à fila SQL escolhida ou cria uma nova lista SQL.
-.TP
-.B Ctrl-P
-Alterna entre diretório, filas SQL 1–3, listas personalizadas, Última pesquisa, histórico e duplicados. O resultado da busca mais recente fica na tabela SQL Última pesquisa até uma nova busca; o cabeçalho exibe o nome lógico da lista, não o nome do snapshot.
-.TP
-.B Del / Alt-D
-Del remove o item apenas da lista; Alt-D apaga o arquivo físico após confirmação.
-.TP
-.B Q / Ctrl-Q
+.BR Q " / " X " / " Ctrl-Q
 Salva a sessão e sai.
 .SH PERSISTENCE AND MIGRATION
 .TP
@@ -4770,16 +4851,13 @@ EAZY_MAN_EOF
         sudo gzip -n -9 -f /usr/share/man/man1/eazy.1 2>/dev/null || true
         echo -e "\033[1;32m✓\033[0m Man page: /usr/share/man/man1/eazy.1.gz"
         command -v mandb &>/dev/null && sudo mandb -q 2>/dev/null || true
-        # também deixa eazy.1 no doc do pacote se existir
-        sudo mkdir -p /usr/share/doc/eazy 2>/dev/null || true
-        sudo cp -f "$MAN_TMP" /usr/share/doc/eazy/eazy.1 2>/dev/null || true
     else
         echo -e "\033[1;31m✗\033[0m Falha ao instalar man page" >&2
     fi
     rm -f "$MAN_TMP"
 
     echo -e "\n\033[1;36m--- verificação ---\033[0m"
-    for _b in eazy eazy-tor eazy-ai.py eazy-notes-editor fzf mpv aria2c tor torsocks python3; do
+    for _b in eazy eazy-yt-stream eazy-tor eazy-ai.py eazy-notes-editor fzf mpv aria2c tor torsocks python3; do
         if command -v "$_b" &>/dev/null; then
             echo -e "  \033[1;32m✓\033[0m $_b → $(command -v "$_b")"
         else
@@ -4801,54 +4879,29 @@ EAZY_MAN_EOF
 elif [ "$1" = "--uninstall" ]; then
     echo -e "\033[1;36m=== ${EAZY_NAME} — desinstalação ===\033[0m"
     REMOVIDO=0
-    if [ -f /usr/local/bin/eazy ]; then
-        sudo rm -f /usr/local/bin/eazy && echo -e "\033[1;32m✓\033[0m /usr/local/bin/eazy" && REMOVIDO=1
+    for DEST in \
+        /usr/bin/eazy \
+        /usr/bin/eazy-yt-stream \
+        /usr/bin/eazy-tor \
+        /usr/bin/eazy-ai.py \
+        /usr/bin/eazy-notes-editor \
+        /usr/lib/eazy/eazy-index.py \
+        /usr/lib/eazy/eazy-live-watch.py \
+        /usr/lib/eazy/full \
+        /usr/lib/eazy/full.c \
+        /usr/lib/eazy/migrate_eazy_lists.py
+    do
+        if [ -f "$DEST" ] || [ -L "$DEST" ]; then
+            sudo rm -f -- "$DEST" && echo -e "\033[1;32m✓\033[0m $DEST" && REMOVIDO=1
+        fi
+    done
+    if [ -f /usr/share/applications/eazy.desktop ] || [ -L /usr/share/applications/eazy.desktop ]; then
+        sudo rm -f -- /usr/share/applications/eazy.desktop && echo -e "\033[1;32m✓\033[0m /usr/share/applications/eazy.desktop" && REMOVIDO=1
     fi
-    if [ -f /usr/bin/eazy ]; then
-        sudo rm -f /usr/bin/eazy && echo -e "\033[1;32m✓\033[0m /usr/bin/eazy" && REMOVIDO=1
-    fi
-    if [ -f /usr/lib/eazy/eazy ]; then
-        sudo rm -f /usr/lib/eazy/eazy && echo -e "\033[1;32m✓\033[0m /usr/lib/eazy/eazy" && REMOVIDO=1
-    fi
-    if [ -f /usr/lib/eazy/eazy-ai.py ]; then
-        sudo rm -f /usr/lib/eazy/eazy-ai.py && echo -e "\033[1;32m✓\033[0m /usr/lib/eazy/eazy-ai.py" && REMOVIDO=1
-    fi
-    if [ -f /usr/lib/eazy/eazy-index.py ]; then
-        sudo rm -f /usr/lib/eazy/eazy-index.py && echo -e "\033[1;32m✓\033[0m /usr/lib/eazy/eazy-index.py" && REMOVIDO=1
-    fi
-    if [ -f /usr/lib/eazy/eazy-live-watch.py ]; then
-        sudo rm -f /usr/lib/eazy/eazy-live-watch.py && echo -e "\033[1;32m✓\033[0m /usr/lib/eazy/eazy-live-watch.py" && REMOVIDO=1
-    fi
-    if [ -f /usr/lib/eazy/full.c ]; then
-        sudo rm -f /usr/lib/eazy/full.c && echo -e "\033[1;32m✓\033[0m /usr/lib/eazy/full.c" && REMOVIDO=1
-    fi
-    if [ -f /usr/lib/eazy/migrate_eazy_lists.py ]; then
-        sudo rm -f /usr/lib/eazy/migrate_eazy_lists.py && echo -e "\033[1;32m✓\033[0m /usr/lib/eazy/migrate_eazy_lists.py" && REMOVIDO=1
-    fi
-    INSTALL_USER="${SUDO_USER:-${USER:-$(id -un)}}"
-    INSTALL_HOME="$(getent passwd "$INSTALL_USER" 2>/dev/null | cut -d: -f6)"
-    [ -n "$INSTALL_HOME" ] || INSTALL_HOME="$HOME"
-    if [ -f "$INSTALL_HOME/.local/bin/eazy" ] || [ -L "$INSTALL_HOME/.local/bin/eazy" ]; then
-        rm -f "$INSTALL_HOME/.local/bin/eazy" && echo -e "\033[1;32m✓\033[0m $INSTALL_HOME/.local/bin/eazy" && REMOVIDO=1
-    fi
-    if [ -f "$INSTALL_HOME/.local/bin/eazy-index.py" ]; then
-        rm -f "$INSTALL_HOME/.local/bin/eazy-index.py" && echo -e "\033[1;32m✓\033[0m $INSTALL_HOME/.local/bin/eazy-index.py" && REMOVIDO=1
-    fi
-    if [ -f "$INSTALL_HOME/.local/bin/eazy-live-watch.py" ]; then
-        rm -f "$INSTALL_HOME/.local/bin/eazy-live-watch.py" && echo -e "\033[1;32m✓\033[0m $INSTALL_HOME/.local/bin/eazy-live-watch.py" && REMOVIDO=1
-    fi
-    if [ -f "$INSTALL_HOME/.local/bin/full.c" ]; then
-        rm -f "$INSTALL_HOME/.local/bin/full.c" && echo -e "\033[1;32m✓\033[0m $INSTALL_HOME/.local/bin/full.c" && REMOVIDO=1
-    fi
-    if [ -f "$INSTALL_HOME/.local/bin/migrate_eazy_lists.py" ]; then
-        rm -f "$INSTALL_HOME/.local/bin/migrate_eazy_lists.py" && echo -e "\033[1;32m✓\033[0m $INSTALL_HOME/.local/bin/migrate_eazy_lists.py" && REMOVIDO=1
-    fi
-    DESKTOP_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
-    [ -f "$DESKTOP_DIR/eazy.desktop" ] && rm -f "$DESKTOP_DIR/eazy.desktop" && echo -e "\033[1;32m✓\033[0m launcher local"
-    [ -f /usr/share/applications/eazy.desktop ] && sudo rm -f /usr/share/applications/eazy.desktop && echo -e "\033[1;32m✓\033[0m launcher sistema"
     if [ -f /usr/share/man/man1/eazy.1 ] || [ -f /usr/share/man/man1/eazy.1.gz ]; then
         sudo rm -f /usr/share/man/man1/eazy.1 /usr/share/man/man1/eazy.1.gz
         echo -e "\033[1;32m✓\033[0m man page (/usr/share/man/man1/eazy.1.gz)"
+        REMOVIDO=1
         command -v mandb &>/dev/null && sudo mandb -q 2>/dev/null || true
     fi
     # Pacote .deb / rpm instalado
@@ -4862,19 +4915,19 @@ elif [ "$1" = "--uninstall" ]; then
         echo -e "Pacote rpm detectado: \033[1;33msudo dnf remove eazy\033[0m"
     fi
     echo -e "\033[0;90mConfig em ~/.config/eazy/ preservada (remova manualmente se quiser).\033[0m"
-    [ "$REMOVIDO" -eq 0 ] && echo -e "Nada encontrado em /usr/local/bin ou /usr/bin."
+    [ "$REMOVIDO" -eq 0 ] && echo -e "Nenhum destino de sistema do eazy encontrado."
     exit 0
 elif [ "$1" = "--stream" ]; then
     shift
     STREAM_BIN="${EAZY_YT_STREAM_BIN:-}"
-    for _candidate in "$STREAM_BIN" "${EAZY_INSTALL_DIR:-}/eazy-yt-stream" /usr/lib/eazy/eazy-yt-stream /usr/bin/eazy-yt-stream "$HOME/.local/bin/eazy-yt-stream" "$HOME/bin/eazy-yt-stream"; do
+    for _candidate in "$STREAM_BIN" "${EAZY_INSTALL_DIR:-}/eazy-yt-stream" /usr/lib/eazy/eazy-yt-stream /usr/bin/eazy-yt-stream; do
         if [ -n "$_candidate" ] && [ -x "$_candidate" ]; then
             STREAM_BIN="$_candidate"
             break
         fi
     done
     if [ -z "$STREAM_BIN" ] || [ ! -x "$STREAM_BIN" ]; then
-        echo "eazy-yt-stream não encontrado. Mantenha-o ao lado de eazy ou instale-o em /usr/lib/eazy/." >&2
+        echo "eazy-yt-stream não encontrado. Mantenha-o ao lado de eazy ou instale-o em /usr/bin/eazy-yt-stream." >&2
         exit 1
     fi
     exec "$STREAM_BIN" "$@"
@@ -6204,7 +6257,7 @@ EOF
   </div>
   <div class="foot">
     <span>$total itens · $(eazy_html_escape "$total_label")</span>
-    <span>Gerado pelo <a href="https://github.com/vapesmadcat-blip/Easy_Player">eazy</a></span>
+    <span>Gerado pelo <a href="https://github.com/jbkrazy77-dotcom/Eazy-player">eazy</a></span>
   </div>
 </div>
 
@@ -9645,12 +9698,10 @@ eazy_stream_delete_item() {
 eazy_tv_aberta() {
     local bin="" op url ytdlp player
     for c in \
-        "$(command -v eazy-yt-stream 2>/dev/null)" \
         "${EAZY_INSTALL_DIR:-}/eazy-yt-stream" \
-        "/usr/lib/eazy/eazy-yt-stream" \
         "/usr/bin/eazy-yt-stream" \
-        "$HOME/.local/bin/eazy-yt-stream" \
-        "$HOME/bin/eazy-yt-stream"
+        "/usr/lib/eazy/eazy-yt-stream" \
+        "$(command -v eazy-yt-stream 2>/dev/null)"
     do
         [ -n "$c" ] && [ -x "$c" ] && { bin="$c"; break; }
     done

@@ -1,3 +1,14 @@
+eazy (5.2.0+rev45) unstable; urgency=medium
+
+  * Promote the complete eazy 5.2.0 rev.45 bundle as the Debian package source.
+  * Include the indexer, list migrator, streaming and Tor tools, AI client,
+    notes editor, live watcher and full C monitor source/binary.
+  * Ship the current desktop launcher, manual page, and TXT/HTML help.
+  * Install helpers under /usr/lib/eazy and user-facing commands under /usr/bin.
+  * Declare Architecture: amd64 because the bundled full monitor is x86_64.
+
+ -- eazy contributors <vapesmadcat-blip@users.noreply.github.com>  Mon, 23 Nov 2026 14:34:00 -0300
+
 eazy (4.1.7) unstable; urgency=medium
 
   * Treat Ctrl-H playlist queries as literal text with grep -F.

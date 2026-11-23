@@ -1,407 +1,221 @@
-.TH EAZY 1 "2026-09-21" "eazy 3.13" "User Commands"
+.TH EAZY 1 "2026-11-23" "eazy 5.2.0 rev.45" "User Commands"
 .SH NAME
-eazy \- navegador e reprodutor multimídia no terminal (fzf + mpv)
+eazy \- navegador de arquivos, reprodutor multimídia, downloads e streaming no terminal
 .SH SYNOPSIS
 .B eazy
 [\fIOPTIONS\fR] [\fIPATH\fR]
-.P
-.B eazy
-.BR \-m | \-\-maintenance
-.P
-.B eazy
-.BR \-a | \-\-advanced\-maintenance
-.P
-.B eazy
-.BR \-\-install | \-\-uninstall | \-\-config | \-\-update\-ytdlp
+.br
+.B eazy \-\-stream
+.br
+.B eazy \-\-install
 .SH DESCRIPTION
 .B eazy
-é um navegador de arquivos e player multimídia para o terminal, baseado em
-.BR fzf (1)
-e
-.BR mpv (1)
-(ou mplayer, cvlc, ffplay).
+é um navegador de arquivos e reprodutor multimídia para o terminal, baseado em fzf e players como mpv, mplayer, VLC ou ffplay. Mantém seleção, filas e listas temporárias, pesquisa, histórico, downloads, exportação HTML, manutenção e backups.
 .P
-Permite navegar pastas, marcar arquivos com
-.B seleção persistente
-entre diretórios, montar filas temporárias e playlists, buscar de forma
-recursiva, detectar duplicados, baixar mídia online e executar manutenção
-do sistema.
+Filas e listas personalizadas são persistidas em tabelas SQLite individuais no banco local. Arquivos temporários em ~/.config/eazy/tmp são snapshots efêmeros de compatibilidade, não a fonte permanente dos dados.
 .P
-A interface principal é o
-.BR fzf :
-lista filtrável, multi-seleção visual e atalhos de teclado personalizados.
-.P
-O pacote Debian da release instala o comando, o editor de notas, a man page
-e um lançador de desktop compatível com KDE Plasma e outros ambientes.
-.SH ARGUMENTS
-.TP
-.I PATH
-Se for um
-.BR diretório ,
-abre o eazy nessa pasta.
-Se for um
-.BR arquivo ,
-abre a pasta pai e posiciona o cursor nesse item.
-Sem argumento, usa o diretório atual.
+A Central complementar \fBeazy-yt-stream\fR oferece pesquisa de vídeos, duração, paginação, pesquisas persistentes, favoritos, canais de filmes gratuitos e TV aberta. Usa yt-dlp e não contorna DRM.
 .SH OPTIONS
 .TP
 .BR \-h ", " \-\-help
-Mostra a ajuda resumida no terminal e sai.
+Mostra a ajuda resumida.
 .TP
 .BR \-V ", " \-\-version
-Mostra a versão (ex.:
-.BR "eazy 3.13 (IA)" )
-e sai.
+Mostra a versão e revisão instalada.
 .TP
 .B \-\-config
-Abre o assistente de configuração (player padrão, volume, pastas,
-preview, etc.). Também acessível por
-.B F9
-dentro do eazy.
+Abre o assistente de configuração, incluindo a pasta de downloads.
 .TP
-.B \-\-install
-Instala dependências ausentes (apt/pacman/dnf/zypper/apk), copia o
-comando para
-.IR /usr/bin/eazy, /usr/lib/eazy/eazy, /usr/local/bin/eazy e ~/.local/bin/eazy ,
-cria
-.IR ~/.config/eazy/
-e scripts auxiliares (ex.: manutenção completa).
+.B \-\-ai
+Abre o chat de IA configurado via OpenRouter.
+.TP
+.B \-\-restore-keys
+Restaura os atalhos de teclado padrão em ~/.config/eazy/keys.
+.TP
+.B \-\-shell-init
+Imprime uma função Bash que permite ao comando eazy mudar de diretório ao sair.
+.TP
+.BR \-v ", " \-\-verbose
+Mostra os arquivos a processar na barra de estado.
+.TP
+.BR \-q ", " \-\-silent
+Desativa a barra de processamento (padrão).
+.TP
+.B \-\-ignore
+Abre anonimamente, sem carregar ou gravar sessão, seleção, posições, histórico ou filas.
+.TP
+.B \-\-unselect
+Limpa a seleção global e local e continua a execução.
 .TP
 .B \-\-uninstall
-Remove
-.I /usr/bin/eazy, /usr/lib/eazy/eazy, /usr/local/bin/eazy e ~/.local/bin/eazy
-e o launcher
-.IR .desktop .
-Preserva
-.IR ~/.config/eazy/ .
+Remove os destinos eazy instalados e o lançador .desktop.
 .TP
-.B \-\-update\-ytdlp
-Baixa o binário oficial mais recente do
-.B yt-dlp
-(sem pip).
+.B \-\-update-ytdlp
+Atualiza o yt-dlp pelo binário oficial, sem pip.
+.TP
+.B \-\-stream
+Abre a Central eazy-yt-stream.
+.TP
+.B \-\-torrent [OPÇÕES]
+Encaminha as opções ao downloader separado eazy-tor.
+.TP
+.B \-\-torrent-list [ARQUIVO]
+Cria uma lista em lote a partir da fila do eazy.
+.TP
+.B \-\-install
+Instala dependências; o principal fica em /usr/bin/eazy, os companions em /usr/bin e os helpers em /usr/lib/eazy.
+.TP
+.B \-\-update-all
+Atualiza dependências e o binário oficial yt-dlp.
 .TP
 .BR \-m ", " \-\-maintenance
-Abre o menu de manutenção:
-.RS
-.IP \(bu 2
-dados do próprio eazy (sem sudo)
-.IP \(bu 2
-manutenção do sistema (sudo quando necessário)
-.IP \(bu 2
-manutenção COMPLETA — RAM, disco, CPU, órfãos, TRIM, kernel, rede (sudo)
-.RE
+Abre as ferramentas de manutenção do sistema e do próprio eazy.
 .TP
-.BR \-a ", " \-\-advanced\-maintenance
-Manutenção avançada com seleção fina de arquivos de dados do eazy.
-.SH TORRENTS (EAZY-TOR)
-O recurso de torrents é executado pelo auxiliar separado
-.BR eazy\-tor .
-Quando chamado com
-.B \-\-torrent ,
-o eazy encaminha as opções diretamente ao auxiliar. O eazy procura primeiro
-um executável ao lado do próprio programa e depois em
-.BR PATH .
-Se o auxiliar não estiver instalado, o eazy informa o erro e encerra.
-.PP
-Uso direto:
-.IP
-.B eazy \-\-torrent
-.RI [ OPÇÕES ]
-.PP
-Consulte as opções disponíveis no auxiliar com:
-.IP
-.B eazy\-tor \-\-help
-.PP
-O Eazy também pode criar uma lista de torrents a partir da fila de
-downloads:
-.IP
-.B eazy \-\-torrent\-list
-.RI [ ARQUIVO ]
-.PP
-Sem um arquivo indicado, a lista é criada em
-.IR ~/.config/eazy/torrents.list .
-Cada linha deve conter um link magnet ou o caminho de um arquivo
-.IR .torrent .
-Depois de editar a lista, execute:
-.IP
-.B eazy\-tor \-\-list
-.IR ARQUIVO
-.PP
-No fluxo de downloads, o eazy pode encaminhar o item com um diretório de
-destino e, quando configurado, a opção
-.B \-\-tor
-ao auxiliar. O destino padrão de torrents é
-.IR ~/Downloads/Torrents ;
-ele pode ser alterado na configuração do eazy.
-.SH SELECTION MODEL
-O eazy combina duas camadas de seleção:
+.B \-\-backup
+Abre o gerenciador de backup.
 .TP
-.B Marcas do fzf
-Multi-select visual da sessão atual (Tab/Espaço). Pode ser perdida após
-.B reload
-(Ctrl-A, filtros, etc.).
+.B \-\-restore-backup
+Abre o restaurador de backup.
 .TP
-.B Seleção persistente
-Lista de caminhos em
-.IR ~/.config/eazy/selected_paths
-(e estado local por diretório). Sobrevive a navegação entre pastas e a
-reloads do fzf.
-.P
-.B Enter
-executa
-.B somente
-o item sob o cursor.
-.P
-.B Alt+Enter
-executa a
-.B seleção inteira
-(união da multi-seleção do fzf com a persistência). O mesmo conjunto é
-usado por Insert, Del, Ctrl-K/Y/U/E.
-.P
-.B F12
-(fora de Duplicados) reaplica a persistência como multi-select manual do
-fzf (marca visual + texto ✓).
-.P
-.B Ctrl-R
-inverte
-.B marcas e persistência
-dos itens visíveis (respeita o filtro atual).
-.SH KEYBINDINGS
-.SS Navegação e seleção
+.BR \-a ", " \-\-advanced-maintenance
+Abre a manutenção avançada para selecionar arquivos próprios do eazy.
+.SH KEY BINDINGS
 .TP
 .B Enter
-Tocar / abrir só o item sob o cursor; entrar em pasta; abrir playlist
-.BR .m3u .
+Abre ou toca o item sob o cursor; em diretórios entra na pasta e em playlists abre o conteúdo. Em arquivos .deb, mostra os dados e solicita confirmação para instalar.
 .TP
-.B Alt+Enter
-Executar a seleção inteira (persistente + marcas), com confirmação se
-houver vários itens.
+.B Ctrl+Espaço / F6
+Ativa a seleção inteira (Alt+Enter quando o terminal permite).
 .TP
 .BR Tab " / " Espaço
-Marcar ou desmarcar o item (atualiza persistência).
+Marca ou alterna itens; a seleção persiste entre pastas.
 .TP
-.B Ctrl\-A
-Selecionar todos os itens visíveis.
-.TP
-.B Ctrl\-X
-Limpar a seleção do diretório / filtro atual.
-.TP
-.B Ctrl\-R
-Inverter seleção (marcas + persistência).
-.TP
-.B F12
-Reaplicar persistência como multi-select do fzf.
-Em modo Duplicados: amostragem (1 arquivo por grupo).
-.SS Filas e playlists
+.BR Ctrl-A " / " Ctrl-X " / " Ctrl-R
+Seleciona todos os visíveis, limpa a seleção do diretório atual ou inverte marcas e persistência.
 .TP
 .B Insert
-Enviar a seleção (mesma regra do Alt+Enter) para fila temporária 1, 2, 3
-ou lista personalizada.
+Envia a seleção para uma fila temporária 1–3 ou para uma lista personalizada.
 .TP
-.B Ctrl\-P
-Alternar Filas 1 → 2 → 3 → listas → duplicados → diretório.
+.B Ctrl-P
+Abre filas/listas SQL, Última pesquisa e Seleção global editável.
 .TP
-.B Ctrl\-O
-Abrir playlist
-.BR .m3u " / " .pls .
+.B Ctrl-F
+Busca recursiva por extensão, tamanho ou conteúdo.
 .TP
-.B Ctrl\-S
-Salvar a fila/playlist ativa (quando aplicável).
-.SS Busca, disco e ações
+.B Ctrl-D
+Busca duplicados.
 .TP
-.B Ctrl\-F
-Busca recursiva (extensão, tamanho, conteúdo).
+.B Ctrl-B
+Abre downloads, incluindo magnets e arquivos .torrent.
 .TP
-.B Ctrl\-D
-Modo duplicados.
+.B Ctrl-O
+Abre uma playlist .m3u ou .pls.
 .TP
-.B Ctrl\-K
-Menu de ações sobre a seleção (mesma fonte do Alt+Enter).
+.B Ctrl-G
+Abre o histórico de reprodução.
 .TP
-.BR Ctrl\-Y " / " Ctrl\-U
-Copiar / mover a seleção.
+.B Ctrl-K
+Abre o menu de ações sobre a seleção.
 .TP
-.B Ctrl\-E
-Tocar a seleção em ordem aleatória (shuffle).
+.BR Ctrl-Y " / " Ctrl-U
+Copia ou move a seleção.
 .TP
-.BR Del " / " Alt\-D
-Remover da lista ou apagar do disco (conforme contexto).
-.SS Outros
+.B Ctrl-E
+Toca a seleção em ordem aleatória.
 .TP
-.B Ctrl\-B
-Fila de downloads (yt-dlp, aria2c, axel, wget).
+.B Ctrl-L
+Vai à pasta do arquivo sob o cursor.
 .TP
-.B Ctrl\-G
-Histórico de arquivos tocados.
+.B Ctrl-Backspace
+Volta ao último diretório.
 .TP
-.B Ctrl\-L
-Ir à pasta do arquivo sob o cursor.
+.B Ctrl-H
+Exporta HTML da seleção ou do conteúdo da tela.
 .TP
-.B Ctrl\-/
-Ligar/desligar preview (preferência persistida).
+.BR Alt+0 " / " Alt+F10
+Mostra o terminal/status e pausa até Enter.
 .TP
-.B Ctrl\-Backspace
-Voltar ao último diretório (em fzf antigo:
-.BR Ctrl\-H ).
+.B Alt+Q
+Pausa com read sem limpar a tela; Enter retoma.
+.TP
+.B Ctrl-/
+Liga ou desliga o preview.
+.TP
+.B Del / Shift+Del / Alt-D
+Apaga o item sob o cursor; apaga a seleção com escolha local/global; ou apaga do disco, respectivamente.
+.TP
+.B F1 / F2 / Ctrl-T
+Ordena por tamanho, nome ou data nos contextos aplicáveis.
+.TP
+.B F3
+Alterna a visualização entre tela cheia e janela.
+.TP
+.B F4 / F5 / F6 / F7 / F8
+Filtra áudio, vídeo, imagens e compactados; F8 alterna entre o filtro atual e todos os itens.
 .TP
 .B F9
-Configuração, overview de hardware e teste de som.
+Configuração, diagnóstico, som e IA.
 .TP
 .B F10
-Ajuda expandida (whiptail).
+Ajuda expandida no terminal ou em HTML.
 .TP
-.BR Q " / " X " / " Ctrl\-Q
-Sair e salvar sessão.
-.SS Dentro do mpv
+.B F12
+Reaplica persistência como multi-select; no modo Duplicados, seleciona uma amostra por grupo.
 .TP
-.B d
-Marcar para exclusão ao sair do player.
+.BR Q " / " X " / " Ctrl-Q
+Salva a sessão e sai.
+.SH PERSISTENCE AND MIGRATION
 .TP
-.B D
-Marcar e ir ao próximo item.
-.SH MAINTENANCE
-.B eazy \-m
-abre o menu:
+.B SQLite database
+O banco padrão é ~/.config/eazy/eazy-index.sqlite3. Ele contém o índice de arquivos, o histórico e as tabelas de filas/listas.
 .TP
-.B 1. Dados do eazy
-Limpeza e validação de playlists, filas, pesquisas e notas — sem sudo.
+.B Legacy history
+Na primeira entrada em Histórico por Ctrl-G ou Ctrl-P, o Easy avisa, reconstrói history_items lendo ~/.config/eazy/history linha a linha e preserva intacto o arquivo de origem. A primeira tentativa migra e retorna; entre novamente no Histórico.
 .TP
-.B 2. Sistema
-Disco, SWAP, som, vídeo, diretórios vazios, DRY-RUN — sudo quando
-necessário.
-.TP
-.B 3. Completa (sudo)
-Script interativo (RAM, caches, órfãos, CPU performance, TRIM, sysctl,
-rede). Gravado em
-.IR ~/.config/eazy/scripts/manut\-completa.sh .
-.P
-Com
-.B DRY RUN
-ligado, operações destrutivas são só simuladas (a manutenção completa
-não roda em simulação parcial).
+.B Legacy queue/list migration
+Antes de usar filas/listas antigas em arquivos, feche o Easy e confira a prévia com python3 migrate_eazy_lists.py. Em instalação Debian, use python3 /usr/lib/eazy/migrate_eazy_lists.py. Aplique com --apply. O migrador faz backup do banco e preserva os arquivos antigos. Não use --replace sem revisar a divergência.
 .SH FILES
 .TP
-.I ~/.config/eazy/config
-Preferências (player, volume, pastas, preview).
+.I ~/.config/eazy/eazy-index.sqlite3
+Índice local, histórico, filas e tabelas de listas temporárias.
 .TP
-.I ~/.config/eazy/session
-Sessão ao sair (diretório, cursor, etc.).
-.TP
-.I ~/.config/eazy/selected_paths
-Seleção persistente global de arquivos.
-.TP
-.I ~/.config/eazy/temp_playlist_1
-.TQ
-.I ~/.config/eazy/temp_playlist_2
-.TQ
-.I ~/.config/eazy/temp_playlist_3
-Filas temporárias (Insert / Ctrl-P).
+.I ~/.config/eazy/tmp/
+Snapshots e outros arquivos temporários da sessão; não são fonte permanente das listas.
 .TP
 .I ~/.config/eazy/history
-Histórico de reprodução.
+Arquivo original de histórico legado, preservado durante a migração.
 .TP
-.I ~/.config/eazy/torrents.list
-Lista de magnets e arquivos
-.IR .torrent
-criada por
-.B eazy \-\-torrent\-list .
+.I /usr/bin/eazy
+Executável principal.
 .TP
-.I ~/.config/eazy/scripts/manut\-completa.sh
-Script de manutenção completa do sistema.
+.I /usr/lib/eazy/
+Componentes auxiliares, incluindo eazy-index.py e o migrador de listas.
 .TP
-.I /usr/bin/eazy, /usr/lib/eazy/eazy, /usr/local/bin/eazy e ~/.local/bin/eazy
-Comando instalado por
-.B \-\-install
-ou pacote
-.BR .deb .
-.SH ENVIRONMENT
+.I /usr/share/man/man1/eazy.1.gz
+Esta man page.
+.SH COMPANIONS
 .TP
-.B EDITOR
-Editor usado em fluxos de notas/configuração, quando aplicável.
+.B eazy-index.py
+Indexação de arquivos e operações transacionais SQLite.
 .TP
-.B PATH
-Deve incluir o diretório do binário
-.B eazy
-e das ferramentas
-.BR fzf ,
-.BR mpv ,
-etc.
-.SH DEPENDENCIES
-.SS Obrigatórias
-.BR bash (1),
-.BR fzf (1),
-.BR whiptail (1)
-(ou libnewt),
-.BR find (1),
-.BR awk (1)
-.SS Player (um deles)
-.BR mpv (1)
-(recomendado),
-.BR mplayer (1),
-.BR cvlc (1),
-.BR ffplay (1)
-.SS Opcionais
-.BR yt\-dlp (1),
-.BR eazy\-tor ,
-.BR aria2c (1),
-.BR axel (1),
-.BR ffmpeg (1),
-.BR chafa (1),
-p7zip,
-smartmontools,
-lm\-sensors
-.SH EXIT STATUS
+.B migrate_eazy_lists.py
+Prévia e migração das listas legadas para tabelas SQLite.
 .TP
-.B 0
-Sucesso ou saída normal pelo usuário.
+.B eazy-yt-stream
+Streaming, pesquisas, filmes gratuitos, TV aberta, favoritos e downloads.
 .TP
-.B >0
-Erro de instalação, dependência ausente, ou falha de operação.
-.SH EXAMPLES
+.B eazy-tor
+Magnets e arquivos .torrent.
 .TP
-Abrir o diretório atual:
-.B eazy
+.B eazy-ai.py
+Cliente de IA acessível pelo F9.
 .TP
-Abrir uma pasta:
-.B eazy ~/Vídeos
-.TP
-Posicionar no arquivo:
-.B eazy ~/Música/faixa.mp3
-.TP
-Manutenção:
-.B eazy \-m
-.TP
-Instalar / atualizar comando e deps:
-.B eazy \-\-install
-.TP
-Criar uma lista de torrents:
-.B eazy \-\-torrent\-list
-.TP
-Encaminhar opções ao auxiliar de torrents:
-.B eazy \-\-torrent \-\-help
-.TP
-Executar uma lista de torrents:
-.B eazy\-tor \-\-list ~/.config/eazy/torrents.list
-.TP
-Instalar a partir de .deb (sem clonar):
-.nf
-curl -fL -o eazy_3.13_all.deb \\
-  https://raw.githubusercontent.com/vapesmadcat-blip/Easy_Player/main/eazy_3.13_all.deb
-sudo apt install ./eazy_3.13_all.deb
-.fi
-.SH BUGS
-Reporte problemas em
-.UR https://github.com/vapesmadcat\-blip/Easy_Player
-.UE
+.B eazy-notes-editor
+Editor de notas rápidas.
+.SH AUTHOR
+John B Kersting
 .SH SEE ALSO
 .BR fzf (1),
 .BR mpv (1),
-.BR find (1),
-.BR yt\-dlp (1),
-.BR whiptail (1)
-.P
-Documentação do repositório:
-.UR https://github.com/vapesmadcat\-blip/Easy_Player
-.UE
-.SH AUTHOR
-eazy contributors. Uso livre. Sem garantias.
+.BR yt-dlp (1),
+.BR aria2c (1)

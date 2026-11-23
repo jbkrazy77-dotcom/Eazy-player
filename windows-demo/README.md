@@ -3,36 +3,38 @@
 Este pacote combina duas experiências distintas:
 
 1. `Windows/eazy-win-demo.py`: protótipo de navegação **nativo no Windows**, sem dependências externas. É uma demonstração limitada de navegação, marcação amarela e Ctrl+K.
-2. `Windows/Run-Full-Easy.ps1`: inicia o **Easy completo dentro do WSL2**. O executável principal é o `eazy` normal da raiz do ZIP enviado; os módulos auxiliares de SQLite, monitoramento, mídia e instalação vêm junto no bundle. O launcher copia o bundle para o filesystem Linux do WSL na primeira execução e inicia o programa a partir dali.
+2. `Windows/Run-Full-Easy.ps1`: inicia o **Easy completo dentro do WSL2**. O executável principal é o `eazy` normal da raiz do ZIP enviado; os módulos auxiliares de SQLite, monitoramento, mídia e instalação vêm junto no bundle. O launcher usa o bundle local para instalar ou atualizar o Easy nos caminhos do sistema do WSL e inicia `/usr/bin/eazy`.
 
 O protótipo nativo não é o Easy completo nem um porte nativo integral. Indexação SQLite, F9, player, watcher, listas e configurações são executados pelo Easy Linux dentro do WSL. Os dados e configurações dessa execução ficam no ambiente Linux da distribuição WSL (`~/.config/eazy`), não no perfil nativo do Windows.
 
 ## Easy completo no WSL2
 
-Requer uma distribuição Linux WSL2 instalada. No PowerShell, a partir desta pasta, execute:
+Requer uma distribuição Linux WSL2 x86_64 instalada. No PowerShell, a partir desta pasta, execute:
 
 ```powershell
 .\Windows\Run-Full-Easy.ps1
 ```
 
-Ou use `Windows\Run-Full-Easy.cmd` para iniciar com duplo clique. O launcher verifica os componentes essenciais e não instala pacotes automaticamente. Se faltar alguma dependência, instale-a na distribuição WSL; em Ubuntu/Debian:
+Ou use `Windows\Run-Full-Easy.cmd` para iniciar com duplo clique. Na primeira execução, ou quando o `eazy` do bundle for diferente do instalado, o launcher executa `install.sh`; isso pode solicitar sua senha `sudo` para instalar dependências e gravar os arquivos do programa em caminhos de sistema. Em Ubuntu/Debian:
 
 ```bash
 sudo apt update
 sudo apt install -y bash python3 fzf whiptail
 ```
 
+O comando principal fica em `/usr/bin/eazy`, os companions CLI em `/usr/bin`, os helpers em `/usr/lib/eazy` e a man page em `/usr/share/man/man1`. O launcher não copia executáveis do Easy para HOME nem para `/usr/local/bin`; as configurações e dados do usuário permanecem em `~/.config/eazy`.
+
 Para construir o executável Linux protegido, também são necessários `gcc` e os headers de zlib:
 
 ```bash
 sudo apt install -y build-essential zlib1g-dev
-cd ~/.local/share/eazy-windows-demo/eazy-5.2.0-rev45
+cd /mnt/c/caminho/ate/Eazy-player-windows-demo-5.2.0-rev45/windows-demo/Easy/eazy-5.2.0-rev45
 ./tools/compilar-eazy.sh ./eazy ./bin/eazy-linux-x86_64
 ```
 
 O compilador acompanha o código-fonte em `Easy/eazy-5.2.0-rev45/tools/compilar-eazy.sh`; ele não altera o `eazy` original. O pacote também inclui o monitor C (`full.c`) e o executável Linux `full`. Reprodutores e utilitários de mídia são opcionais e dependem da configuração do WSL.
 
-O launcher mantém uma cópia do programa em `~/.local/share/eazy-windows-demo/eazy-5.2.0-rev45`, fora da unidade Windows, para evitar executar repetidamente fontes e arquivos temporários sobre `/mnt/c`. Para forçar uma nova cópia, remova essa pasta no WSL e execute o launcher outra vez.
+O bundle-fonte permanece na pasta escolhida no Windows; a instalação operacional do programa ocorre nos diretórios de sistema do WSL. O launcher não mantém uma segunda cópia executável do Easy em `~/.local/share`.
 
 ## Protótipo nativo limitado
 

@@ -11,7 +11,7 @@ Easy é um gerenciador de arquivos e mídia em Bash, com indexação SQLite, nav
 
 O conjunto completo de módulos necessários para executar e instalar o Easy, junto com o executável principal da raiz, está em [`windows-demo/Easy/eazy-5.2.0-rev45/`](windows-demo/Easy/eazy-5.2.0-rev45/). Esse diretório inclui indexador SQLite, monitoramento, auxiliares de mídia, instalação, o código-fonte `full.c` e o compilador `tools/compilar-eazy.sh`.
 
-No Linux ou WSL2, instale os requisitos essenciais e inicie o instalador do bundle:
+No Linux x86_64 ou WSL2 x86_64, instale os requisitos essenciais e inicie o instalador do bundle:
 
 ```bash
 sudo apt update
@@ -29,6 +29,8 @@ sudo apt install -y build-essential zlib1g-dev
 ```
 
 O script cria um wrapper Linux x86_64 e não altera o fonte `eazy`. A versão em Bash continua incluída no pacote.
+
+O instalador coloca o comando principal em `/usr/bin/eazy`, os companions executáveis em `/usr/bin`, os helpers em `/usr/lib/eazy` e a man page em `/usr/share/man`. Não instala cópias executáveis em HOME nem em `/usr/local/bin`; configurações e dados do usuário permanecem em `~/.config/eazy`. O pacote Debian é `amd64`, pois inclui o monitor compilado `full` para x86_64.
 
 ## Demonstração Windows
 

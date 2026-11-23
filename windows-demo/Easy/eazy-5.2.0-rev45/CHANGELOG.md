@@ -5,6 +5,7 @@
 - Ctrl+K prioriza somente os itens amarelos imediatos do diretório atual, sem promover nem consumir seleção global. Sem amarelos, usa somente o arquivo sob o cursor; opções sem alvo de arquivo (manutenção, sistema, swap e similares) continuam disponíveis.
 - Reduz subprocessos no cálculo da contagem do menu Ctrl+K e na alternância de seleção de pastas.
 - Verificado com testes sintéticos de seleção global/local, cursor, descendentes, alternância de arquivos/pastas e fila do monitor; a medição local do sandbox não substitui teste de tempo real no WSL/DrvFs.
+- Instalação local e WSL mantém o executável em `/usr/bin/eazy`, companions em `/usr/bin` e helpers em `/usr/lib/eazy`, sem cópias executáveis do Easy no HOME ou em `/usr/local/bin`; o pacote Debian é `amd64` por incluir `full` x86_64. O Easy Stream distribuído foi conferido com o anexo do usuário.
 
 ## 5.2.0 rev.44 — escopo de pastas, curingas e filtros em listas
 

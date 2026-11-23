@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>eazy 5.2.0 — Help</title>
+<title>eazy 5.2.0 rev.45 (sqlite-live-watch) — Help</title>
 <style>:root{color-scheme:dark}body{font:16px/1.55 system-ui,sans-serif;max-width:1000px;margin:40px auto;padding:0 20px;background:#10141c;color:#e8eef7}h1{color:#6ee7b7}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#171e2b;padding:24px;border-radius:12px}</style>
 </head>
-<body><h1>eazy 5.2.0</h1><pre>eazy 5.2.0 rev.2 (sqlite-history-and-playlists) — navegador e player multimídia no terminal
+<body><h1>eazy 5.2.0 rev.45 (sqlite-live-watch)</h1><pre>eazy 5.2.0 rev.45 (sqlite-live-watch) — navegador e player multimídia no terminal
+
 Made by John B Kersting
 Uso:
   eazy [OPÇÕES] [PASTA|ARQUIVO]
+
 Argumentos:
   PASTA              Abre o eazy nesse diretório
   ARQUIVO            Abre a pasta do arquivo e posiciona o cursor nele
+
 Opções:
   -h, --help         Mostra esta ajuda
   -V, --version      Mostra a versão e revisão
@@ -24,11 +27,11 @@ Opções:
   --silent, -q       Silencioso (padrão): sem barra de processamento
   --ignore           Anónimo: sem sessão, seleção, posições, histórico, filas
   --unselect         Limpa seleção global e local (selected_paths) e continua
-  --install          Instala dependências, comando global e scripts auxiliares
+  --install          Instala o principal em /usr/bin/eazy e os auxiliares do sistema
   --update-all       Atualiza todas as dependências (+ yt-dlp oficial)
-  --stream           Abre a Central completa de streaming/filmes
   --uninstall        Remove os destinos eazy instalados e o launcher .desktop
   --update-ytdlp     Atualiza o yt-dlp (binário oficial, sem pip)
+  --stream           Abre o menu interativo do eazy-yt-stream
   --torrent [OPÇÕES] Encaminha para o downloader separado eazy-tor
   --torrent-list [FILE] Cria lista em lote a partir da fila do eazy
   -m, --maintenance  Manutenção + backup/restaurar (escolhe o que salvar)
@@ -36,20 +39,21 @@ Opções:
   --restore-backup   Restaurar um .tar.gz de backup
   -a, --advanced-maintenance
                      Manutenção avançada (seleção fina de arquivos do eazy)
+
 Atalhos principais (dentro do eazy):
   Enter              Abrir/tocar; em .deb mostra dados e instala com confirmação
   Ctrl+Espaço / F6   Seleção inteira (Alt+Enter se o terminal permitir)
-  Tab · Espaço       Marcar itens (persiste entre pastas)
+  Tab · Espaço       Marcar itens (seleção persistente entre pastas)
   Ctrl-A             Selecionar todos os visíveis
   Ctrl-X             Limpar seleção do diretório atual
   Ctrl-R             Inverter seleção (marcas + persistência)
-  Insert             Enviar seleção para fila ou lista temporária SQL
-  Ctrl-P             Diretório → filas 1–3 → listas SQL → histórico → duplicados
+  Insert             Enviar seleção para fila tmp 1/2/3 ou lista personalizada
+  Ctrl-P             Filas/listas SQL, Última pesquisa e Seleção global editável
   Ctrl-F             Busca recursiva (extensão, tamanho, conteúdo)
   Ctrl-D             Duplicados
-  Ctrl-B             Downloads, fila de streams e Central eazy-yt-stream
+  Ctrl-B             Downloads (inclui magnets/.torrent e destino padrão: ~/Downloads)
   Ctrl-O             Abrir playlist .m3u / .pls
-  Ctrl-G             Histórico de reprodução
+  Ctrl-G             Histórico
   Ctrl-K             Menu de ações (mesma seleção do Alt+Enter)
   Ctrl-Y / Ctrl-U    Copiar / mover seleção
   Ctrl-E             Tocar seleção em ordem aleatória
@@ -57,45 +61,44 @@ Atalhos principais (dentro do eazy):
   Ctrl-Backspace     Voltar ao último diretório
   Ctrl-H             Exportar HTML: seleção (se houver) ou conteúdo da tela
   Alt+0 (ou Alt+F10) Tela do terminal (status) + pausa Enter
+  Alt+Q              Pausar com read, sem limpar a tela; Enter retoma
   Ctrl-/             Preview on/off (persiste)
-  Del                Remover item somente da lista
-  Shift+Del          Apagar seleção (pergunta: local ou global)
-  Alt-D              Apagar do disco após confirmação
+  Del               Apagar só o item sob o cursor
+  Shift+Del         Apagar seleção (pergunta: local ou global)
+  Alt-D             Apagar do disco
   F9                 Configuração, overview e teste de som
   F10                Ajuda expandida (atalhos, .deb, downloads, Tor e configuração)
   F12                Reaplicar persistência como multi-select (ou amostra em duplicados)
   Q · X · Ctrl-Q     Sair (salva sessão)
+
 Manutenção (eazy -m):
   1  Dados do próprio eazy (sem sudo)
   2  Manutenção do sistema (sudo quando necessário)
   3  Manutenção COMPLETA — RAM/Disco/CPU/órfãos/TRIM (sudo)
+
 No mpv:
   d                  Marcar para exclusão ao sair
   D                  Marcar e ir ao próximo
+
 Arquivos de configuração:
   ~/.config/eazy/config
   ~/.config/eazy/session
   ~/.config/eazy/selected_paths
-  ~/.config/eazy/eazy-index.sqlite3
-  ~/.config/eazy/tmp/          (snapshots efêmeros e temporários; não usa /tmp)
+  ~/.config/eazy/eazy-index.sqlite3 (índice, histórico e filas/listas SQL)
+  ~/.config/eazy/tmp/          (snapshots transitórios — não usa /tmp)
   ~/.config/eazy/scripts/manut-completa.sh
-PERSISTÊNCIA SQLITE (histórico e listas):
-  Banco: ~/.config/eazy/eazy-index.sqlite3
-  Histórico: Ctrl+G ou Ctrl+P → Histórico. Na primeira entrada, o Easy avisa,
-  recria history_items lendo ~/.config/eazy/history linha a linha e preserva
-  intacto o arquivo original. A primeira tentativa migra e retorna; entre
-  novamente no Histórico.
-  Filas 1–3 e listas personalizadas: tabelas SQLite individuais. Ctrl+P,
-  criação, inclusão, remoção, validação e reprodução usam o banco. Os arquivos
-  em ~/.config/eazy/tmp são snapshots transitórios de compatibilidade, não
-  listas permanentes. O cabeçalho mostra o nome lógico escolhido no Ctrl+P.
-  Migração de arquivos antigos (feche o Easy antes): primeiro veja a prévia,
-  depois aplique. Os arquivos legados não são apagados e o banco recebe backup.
-    python3 migrate_eazy_lists.py
-    python3 migrate_eazy_lists.py --apply
-  Não use --replace sem revisar uma divergência e querer substituir a tabela.
-  Auxiliar de índice: eazy-index.py (junto de eazy ou em /usr/lib/eazy/)
-Dependências: fzf, mpv (ou mplayer/cvlc/ffplay), whiptail, find, awk, python3
+
+Filas 1–3 e listas personalizadas são tabelas SQLite. Arquivos em tmp são
+snapshots temporários, não listas permanentes. Para migrar listas legadas,
+feche o Easy, confira a prévia com python3 migrate_eazy_lists.py e aplique
+com python3 migrate_eazy_lists.py --apply; os arquivos originais são mantidos.
+O resultado da busca mais recente fica na tabela SQLite Última pesquisa e pode
+ser reaberto pelo Ctrl-P até a próxima busca. --ignore desativa essa persistência.
+
+Em um arquivo .deb: pressione Enter para conferir o pacote e instalar com APT.
+A lista usa TAM · DATA · TIPO e mantém o ciclo visual idx3 de três cores.
+
+Dependências: fzf, mpv (ou mplayer/cvlc/ffplay), whiptail, find, awk
 Opcionais: yt-dlp, aria2c, axel, chafa, ffmpeg, p7zip-full, smartmontools
 </pre></body>
 </html>

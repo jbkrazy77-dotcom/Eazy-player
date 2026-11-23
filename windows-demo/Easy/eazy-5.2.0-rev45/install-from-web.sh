@@ -1,17 +1,31 @@
 #!/usr/bin/env bash
+# Baixa e instala exclusivamente a release aprovada Easy 5.2.0 rev45.
 set -euo pipefail
-VERSION="5.2.0"
-TAG="v${VERSION}"
-BASE="https://github.com/vapesmadcat-blip/Easy_Player/releases/download/${TAG}"
-TMP="${TMPDIR:-/tmp}/eazy-${VERSION}-$$"
-mkdir -p "$TMP"
-trap 'rm -rf "$TMP"' EXIT
-cd "$TMP"
-printf '==> Baixando Easy %s...\n' "$VERSION"
-curl -fL -o "eazy_${VERSION}_all.deb" "$BASE/eazy_${VERSION}_all.deb"
-curl -fL -o "eazy_${VERSION}_all.deb.sha256" "$BASE/eazy_${VERSION}_all.deb.sha256"
-sha256sum -c "eazy_${VERSION}_all.deb.sha256"
-printf '==> Instalando Easy %s...\n' "$VERSION"
-sudo dpkg -i "eazy_${VERSION}_all.deb" || sudo apt-get install -f -y
-printf '==> Easy %s instalado.\n' "$VERSION"
-eazy --version 2>/dev/null || true
+
+REPOSITORY="jbkrazy77-dotcom/Eazy-player"
+TAG="v5.2.0-rev45"
+DEB="eazy_5.2.0+rev45_amd64.deb"
+BASE="https://github.com/${REPOSITORY}/releases/download/${TAG}"
+TMP="$(mktemp -d "${TMPDIR:-/tmp}/eazy-rev45.XXXXXX")"
+trap 'rm -rf -- "$TMP"' EXIT
+cd -- "$TMP"
+
+printf '==> Baixando %s da release %s...\n' "$DEB" "$TAG"
+curl --fail --location --show-error --silent -o "$DEB" "$BASE/$DEB"
+curl --fail --location --show-error --silent -o "$DEB.sha256" "$BASE/$DEB.sha256"
+sha256sum --check "$DEB.sha256"
+
+printf '==> Instalando pacote Debian oficial via apt...\n'
+sudo apt install -y "./$DEB"
+
+if ! dpkg-query -W -f='${Status}' eazy 2>/dev/null | grep -Fqx 'install ok installed'; then
+  echo "O pacote eazy não consta como instalado após o apt." >&2
+  exit 1
+fi
+if ! dpkg-query -L eazy | grep -Fqx '/usr/bin/eazy' || [[ ! -x /usr/bin/eazy ]]; then
+  echo "O pacote não instalou o comando principal executável em /usr/bin/eazy." >&2
+  exit 1
+fi
+
+printf '==> Easy 5.2.0 rev45 instalado; comando principal: /usr/bin/eazy\n'
+/usr/bin/eazy --version

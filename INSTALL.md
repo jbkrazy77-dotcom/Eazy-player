@@ -21,7 +21,9 @@ cd windows-demo/Easy/eazy-5.2.0-rev45
 ./install.sh
 ```
 
-O instalador do Easy não deve apagar a configuração existente em `~/.config/eazy`. Revise as ações interativas antes de confirmá-las.
+O comando principal é instalado em `/usr/bin/eazy`, os companions em `/usr/bin` e os helpers em `/usr/lib/eazy`; a man page fica em `/usr/share/man/man1`. O instalador não coloca executáveis do Easy em HOME nem em `/usr/local/bin`. Configurações e dados existentes em `~/.config/eazy` são preservados. Revise as ações interativas antes de confirmá-las.
+
+O pacote Debian incluído na release é `amd64`, pois contém o monitor x86_64 compilado. A demonstração completa via WSL2 também requer uma distribuição Linux x86_64.
 
 ## Compilar o executável Linux x86_64
 

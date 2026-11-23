@@ -1,57 +1,49 @@
-# Easy Player 5.2.0
+# Easy 5.2.0 rev.45 — bundle Linux/WSL2
 
-Navegador e reprodutor multimídia no terminal, com seleção persistente, filas e listas temporárias SQLite, histórico SQLite, downloads, manutenção, IA, editor de notas, torrents e Central de streaming.
+Este diretório contém o `eazy` da raiz do repositório como executável principal, além de Easy Stream, indexador SQLite, migrador, watcher, monitor C, compilador, ajuda, man page e ferramentas auxiliares.
 
-## Executar sem instalação
-
-Para testar uma cópia descompactada, execute `./run-beta.sh` (ou `./eazy`) com `eazy-index.py` ao lado do programa. Isso não instala nada.
-
-## Instalação
+## Testar sem instalar
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/vapesmadcat-blip/Easy_Player/main/install-from-web.sh | bash
-```
-
-Instalação manual pelo pacote Debian:
-
-```bash
-curl -fLO https://github.com/vapesmadcat-blip/Easy_Player/releases/download/v5.2.0/eazy_5.2.0_all.deb
-curl -fLO https://github.com/vapesmadcat-blip/Easy_Player/releases/download/v5.2.0/eazy_5.2.0_all.deb.sha256
-sha256sum -c eazy_5.2.0_all.deb.sha256
-sudo apt install ./eazy_5.2.0_all.deb
-```
-
-## Persistência local SQLite
-
-O banco padrão fica em `~/.config/eazy/eazy-index.sqlite3`. O histórico e as filas/listas temporárias são armazenados em tabelas SQLite. Arquivos de texto em `~/.config/eazy/tmp/` são snapshots efêmeros usados somente para compatibilidade com componentes que consomem linhas; não são a fonte persistente. O cabeçalho e o menu Ctrl+P usam o nome lógico da lista.
-
-Na primeira entrada no Histórico, por `Ctrl+G` ou `Ctrl+P`, o Easy lê o arquivo legado `~/.config/eazy/history`, recria a tabela de histórico e preserva intacto o arquivo original. A primeira tentativa conclui a migração e retorna; abra o Histórico novamente.
-
-Para migrar filas/listas antigas `temp_playlist_*` antes de usar a versão SQLite, feche o Easy e execute o migrador incluído na distribuição. Primeiro confira a prévia e depois aplique:
-
-```bash
-python3 migrate_eazy_lists.py
-python3 migrate_eazy_lists.py --apply
-```
-
-No pacote Debian, o migrador fica em `/usr/lib/eazy/migrate_eazy_lists.py`. O migrador cria backup do banco existente antes de gravar e não apaga os arquivos legados. Não use `--replace` a menos que tenha verificado a prévia e queira substituir o conteúdo SQL divergente pelo arquivo original.
-
-## Streaming
-
-A Central abre com `eazy --stream` ou pelo menu de streams do `Ctrl-B`. Usa `yt-dlp`, apresenta duração e paginação, mantém pesquisas e histórico de filmes assistidos, permite favoritos e inclui fontes públicas de filmes e TV aberta.
-
-## Componentes
-
-A distribuição inclui `eazy`, `eazy-index.py`, `migrate_eazy_lists.py`, `eazy-yt-stream`, `eazy-tor`, `eazy-ai.py`, `eazy-notes-editor`, launcher desktop, man page e Help HTML/TXT. Os instaladores colocam os componentes nos caminhos de sistema ou do usuário sem caminhos de usuário fixos.
-
-## Desenvolvimento e validação
-
-```bash
-bash -n eazy eazy-yt-stream
-python3 -m unittest discover -s tests -p 'test_sqlite_*.py' -v
-./packaging/build-deb.sh
 ./eazy --version
 ./eazy --help
 ```
 
-**Made by John B Kersting.**
+Para testar monitoramento, streaming e recursos auxiliares, mantenha todos os arquivos deste bundle juntos. O programa em Bash e seus companions devem ser usados no Linux ou no WSL2.
+
+## Instalação local
+
+No Debian/Ubuntu ou numa distribuição Debian/Ubuntu dentro do WSL2 x86_64:
+
+```bash
+sudo apt update
+sudo apt install -y bash python3 fzf whiptail
+./install.sh
+```
+
+Ou use `./install-eazy-pronto.sh`; ambos delegam à instalação oficial do Easy neste bundle.
+
+O executável principal fica em `/usr/bin/eazy`; os companions CLI ficam em `/usr/bin`, os auxiliares em `/usr/lib/eazy`, o launcher em `/usr/share/applications` e a man page em `/usr/share/man/man1`. Não são criadas cópias executáveis em HOME ou em `/usr/local/bin`. Configurações e dados do usuário permanecem em `~/.config/eazy`.
+
+## Instalação pela Internet
+
+O instalador `install-from-web.sh` baixa o pacote validado por SHA-256 da release `v5.2.0-rev45` do repositório `jbkrazy77-dotcom/Eazy-player`. O pacote Debian disponibilizado é `amd64`, pois contém o monitor x86_64 `full`.
+
+## Instalação WSL2
+
+Use `./install-wsl2.sh` em uma distribuição WSL2 x86_64 baseada em Debian/Ubuntu. O script instala pacote local validado por SHA-256, se presente, ou delega ao instalador web; depois verifica `/usr/bin/eazy` e instala as dependências usuais do fluxo WSL. O launcher Windows correspondente fica em `../Windows/Run-Full-Easy.ps1`.
+
+## Compilador
+
+O fonte `full.c` e o compilador `tools/compilar-eazy.sh` acompanham o bundle. Para compilar o wrapper Linux x86_64 do Easy:
+
+```bash
+sudo apt install -y build-essential zlib1g-dev
+./tools/compilar-eazy.sh ./eazy ./bin/eazy-linux-x86_64
+```
+
+O compilador não altera o fonte `eazy`.
+
+## Limites
+
+A demonstração Windows executa o Easy completo dentro do Linux/WSL2; não é uma conversão nativa completa para Windows. O protótipo Python nativo é limitado à navegação demonstrativa.

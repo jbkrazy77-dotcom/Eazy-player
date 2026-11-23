@@ -395,8 +395,8 @@ O programa também verifica espaço em disco antes de operações de cópia, mov
 | `eazy --help` | Ajuda resumida |
 | `eazy --version` | Mostra a versão |
 | `eazy --config` | Abre configuração |
-| `eazy --install` | Instala dependências e o comando global |
-| `eazy --uninstall` | Remove o comando instalado e o launcher local |
+| `eazy --install` | Instala dependências e os comandos de sistema em `/usr/bin` |
+| `eazy --uninstall` | Remove os comandos de sistema e o launcher system-wide |
 | `eazy --update-ytdlp` | Atualiza o yt-dlp em `~/.local/bin` |
 
 ## 24. Instalação e dependências
@@ -407,7 +407,7 @@ No Debian/Ubuntu, o instalador verifica e instala ferramentas como `fzf`, `mpv`,
 
 O pacote `rar` oficial pode depender da habilitação do repositório `non-free`; por isso é tratado como opcional. O eazy informa essa condição sem impedir a instalação do restante.
 
-Além de copiar o comando global para `/usr/local/bin/eazy`, o `--install` instala o editor de notas em `/usr/lib/eazy/eazy-notes-editor`, instala o launcher quando encontrado e cria a estrutura inicial de dados do usuário.
+O `--install` instala o comando principal em `/usr/bin/eazy`, os companions CLI em `/usr/bin`, os helpers em `/usr/lib/eazy`, a man page em `/usr/share/man/man1` e o launcher em `/usr/share/applications`. Não instala cópias executáveis do Easy no HOME nem em `/usr/local/bin`. A configuração e os dados pessoais continuam em `~/.config/eazy` e outros diretórios do usuário. O pacote Debian desta revisão é `amd64`, pois inclui o monitor compilado `full` para x86_64.
 
 ## 25. Diretórios criados pelo instalador
 
@@ -485,6 +485,6 @@ A combinação de seleção múltipla, diretórios tratados corretamente, listas
 
 ## Referências
 
-[1]: https://github.com/vapesmadcat-blip/Easy_Player "Repositório oficial do Easy_Player"
+[1]: https://github.com/jbkrazy77-dotcom/Eazy-player "Repositório oficial do Eazy-player"
 
 O código-fonte e as versões publicadas estão disponíveis no [repositório oficial do projeto][1].
