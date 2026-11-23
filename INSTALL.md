@@ -1,87 +1,42 @@
-# eazy 3.13 — instalar e atualizar o repo
+# Instalação do eazy 5.2.0 rev.45
 
-Zip em `~/prj`, repo em `~/prj/Easy_Player`.
+## Requisitos essenciais
 
-## Dependências
-
-Em Ubuntu ou Debian:
+Em Ubuntu/Debian ou numa distribuição Linux do WSL2:
 
 ```bash
 sudo apt update
-sudo apt install -y bash fzf whiptail mpv ffmpeg curl wget python3 build-essential zlib1g-dev
+sudo apt install -y bash python3 fzf whiptail
 ```
 
-## Reinstalar via `.deb` diretamente do repositório
+`mpv`, `ffmpeg`, `curl` e `wget` são opcionais, conforme as funcionalidades de mídia e rede utilizadas. A compilação do wrapper Linux requer `build-essential` e `zlib1g-dev`.
 
-Este procedimento reinstala o Eazy 3.13 completo, sem executar `uninstall` e sem apagar `~/.config/eazy`:
+## Instalar a partir deste repositório
+
+Use o bundle completo, que mantém o `eazy` da raiz como executável principal e traz seus módulos auxiliares ao lado:
 
 ```bash
-cd /tmp
-curl -fL -o eazy_3.13_all.deb \
-  https://raw.githubusercontent.com/vapesmadcat-blip/Easy_Player/main/eazy_3.13_all.deb
-sudo apt install ./eazy_3.13_all.deb
-eazy --version
+cd windows-demo/Easy/eazy-5.2.0-rev45
+./eazy --version
+./install.sh
 ```
 
-O pacote instala o binário protegido, o editor de notas, a man page e o lançador compatível com KDE Plasma. Para atualizar o cache do KDE manualmente, use:
+O instalador do Easy não deve apagar a configuração existente em `~/.config/eazy`. Revise as ações interativas antes de confirmá-las.
+
+## Compilar o executável Linux x86_64
+
+O compilador fornecido fica em `tools/compilar-eazy.sh`:
 
 ```bash
-kbuildsycoca6 --noincremental 2>/dev/null || kbuildsycoca5 --noincremental 2>/dev/null || true
+sudo apt install -y build-essential zlib1g-dev
+cd windows-demo/Easy/eazy-5.2.0-rev45
+mkdir -p bin
+./tools/compilar-eazy.sh ./eazy ./bin/eazy-linux-x86_64
+sha256sum ./bin/eazy-linux-x86_64
 ```
 
-## Usar a versão-fonte
+O script compila um wrapper C que incorpora uma cópia comprimida do fonte Bash e o executa com `/bin/bash`. O fonte `eazy` original não é modificado. O bundle inclui também `full.c` e o monitor `full` já compilado.
 
-```bash
-cd ~/prj
-unzip -o eazy-3.2.10-release.zip
-cp -f eazy-3.2.10-release/* ~/prj/Easy_Player/
-cd ~/prj/Easy_Player
-chmod +x eazy install.sh eazy-notes-editor 2>/dev/null || true
-./eazy --install
-eazy --version
-```
+## Windows
 
-## Usar o executável Linux
-
-O executável pré-compilado está em `bin/eazy-linux-x86_64` e é destinado a Linux 64 bits x86_64/amd64:
-
-```bash
-cd ~/prj/Easy_Player
-chmod +x bin/eazy-linux-x86_64
-./bin/eazy-linux-x86_64
-```
-
-Para instalá-lo como comando do sistema:
-
-```bash
-sudo install -Dm755 bin/eazy-linux-x86_64 /usr/local/bin/eazy
-eazy
-```
-
-## Recompilar o executável
-
-O compilador está em `tools/compilar-eazy.sh`:
-
-```bash
-cd ~/prj/Easy_Player
-chmod +x tools/compilar-eazy.sh
-tools/compilar-eazy.sh eazy bin/eazy-linux-x86_64
-```
-
-O arquivo `eazy` original não é alterado. Depois da compilação, confira o checksum:
-
-```bash
-sha256sum bin/eazy-linux-x86_64
-```
-
-## Publicar alterações
-
-```bash
-
-git add eazy eazy-3.2.10 VERSION README.md CHANGELOG.md INSTALL.md \
-        eazy.desktop install.sh eazy-notes-editor \
-        eazy_3.2.10_all.deb eazy_3.2.10_all.deb.sha256 2>/dev/null || true
-git add -A
-git commit -m "Adiciona executável Linux e script de compilação"
-git push origin main
-```
+Para executar a demonstração do Easy completo em Windows, use WSL2 e siga [`windows-demo/README.md`](windows-demo/README.md). O launcher inicia o Easy Linux dentro do WSL; o protótipo nativo Python é apenas uma demonstração limitada de navegação.

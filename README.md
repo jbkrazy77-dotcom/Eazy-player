@@ -1,53 +1,45 @@
-# eazy 3.2.10 (release)
+# eazy 5.2.0 rev.45
 
-https://github.com/vapesmadcat-blip/Easy_Player
-
-## Executável Linux
-
-O binário protegido para Linux 64 bits fica em [`bin/eazy-linux-x86_64`](bin/eazy-linux-x86_64). Para usar:
+Easy é um gerenciador de arquivos e mídia em Bash, com indexação SQLite, navegação interativa e monitoramento de alterações. O executável principal desta entrega é o arquivo `eazy` na raiz deste repositório.
 
 ```bash
-cd bin
-chmod +x eazy-linux-x86_64
-./eazy-linux-x86_64
+./eazy --version
+# eazy 5.2.0 rev.45 (sqlite-live-watch)
 ```
 
-O binário foi compilado para arquiteturas **x86_64/amd64** e ainda requer as dependências usadas pelo Eazy, como `bash`, `fzf`, `whiptail`, `mpv`, `ffmpeg`, `curl` e `wget`.
+## Conteúdo e uso
 
-Para recompilar o binário a partir do código-fonte atual:
+O conjunto completo de módulos necessários para executar e instalar o Easy, junto com o executável principal da raiz, está em [`windows-demo/Easy/eazy-5.2.0-rev45/`](windows-demo/Easy/eazy-5.2.0-rev45/). Esse diretório inclui indexador SQLite, monitoramento, auxiliares de mídia, instalação, o código-fonte `full.c` e o compilador `tools/compilar-eazy.sh`.
+
+No Linux ou WSL2, instale os requisitos essenciais e inicie o instalador do bundle:
 
 ```bash
-./tools/compilar-eazy.sh eazy bin/eazy-linux-x86_64
+sudo apt update
+sudo apt install -y bash python3 fzf whiptail
+cd windows-demo/Easy/eazy-5.2.0-rev45
+./eazy --version
+./install.sh
 ```
 
-O script de compilação gera um wrapper executável para scripts Bash grandes e não modifica o arquivo-fonte original.
+Players e ferramentas de mídia, como `mpv`, `ffmpeg`, `curl` e `wget`, são opcionais e habilitam funcionalidades correspondentes. Para compilar o executável Linux protegido são necessários GCC e os headers de zlib:
 
-## Destaques
-- Enter em `.py` / `.sh` / `.html`: menu estilo PDF (Executar | Ver | Editar | Voltar)
-- PYTHON_CMD / SHELL_CMD no F9
-- Alt-X com quantidade e bytes
-- F9 shell + EXIT_DIR_MODE + --shell-init
-- HTML no browser, Del/Shift+Del, lixeira
+```bash
+sudo apt install -y build-essential zlib1g-dev
+./tools/compilar-eazy.sh ./eazy ./bin/eazy-linux-x86_64
+```
 
-## Instalação
-Consulte [INSTALL.md](INSTALL.md) para instalação pela fonte, uso do binário e recompilação.
+O script cria um wrapper Linux x86_64 e não altera o fonte `eazy`. A versão em Bash continua incluída no pacote.
+
+## Demonstração Windows
+
+A pasta [`windows-demo/`](windows-demo/) contém um protótipo de navegação nativo limitado e um launcher para executar o Easy completo via WSL2. A versão completa ainda não é um porte nativo para Windows: ela executa no Linux/WSL, mantendo SQLite, watcher e demais componentes do ambiente Linux.
+
+Leia [`windows-demo/README.md`](windows-demo/README.md) para instruções, requisitos e limites da demonstração.
+
+## Versões
+
+O histórico de alterações da linha 5.2.0 está em [`CHANGELOG.md`](CHANGELOG.md); a revisão publicada pelo executável é **45**. `VERSION` registra a versão-base `5.2.0`.
 
 ## Autoria
 
-**Made by John B Kersting.**
-
-Para reinstalar completamente a versão 3.13 diretamente deste repositório, sem desinstalar e preservando `~/.config/eazy`:
-
-```bash
-chmod +x reinstalar-eazy-3.13.sh
-./reinstalar-eazy-3.13.sh
-```
-
-Também é possível reinstalar diretamente pelo pacote Debian publicado no repositório:
-
-```bash
-cd /tmp
-curl -fL -o eazy_3.13_all.deb \
-  https://raw.githubusercontent.com/vapesmadcat-blip/Easy_Player/main/eazy_3.13_all.deb
-sudo apt install ./eazy_3.13_all.deb
-```
+Desenvolvido por John B. Kersting.

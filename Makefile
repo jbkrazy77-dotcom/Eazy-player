@@ -1,6 +1,7 @@
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
-VERSION = 3.2.2
+VERSION = 5.2.0
+REVISION = 45
 BIN_DIR = bin
 BIN_TARGET = $(BIN_DIR)/eazy-linux-x86_64
 
@@ -19,4 +20,4 @@ compile-bin:
 	./tools/compilar-eazy.sh eazy $(BIN_TARGET)
 
 dist:
-	tar -czf eazy-$(VERSION).tar.gz eazy README.md INSTALL.md install.sh Makefile
+	python3 tools/package-windows-demo.py dist/eazy-windows-demo-$(VERSION)-rev$(REVISION).zip
